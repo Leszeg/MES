@@ -1,5 +1,6 @@
 from math import sqrt
 from MES.Node import Node
+import numpy as np
 
 
 class Element:
@@ -50,3 +51,89 @@ class Element:
                     result = result + fpc[tmp] * Ak[i] * Ak[j]
                     tmp += 1
             return result
+
+    def jacobian(self):
+        x = [0, 4, 4, 0]
+        y = [0, 0, 4, 4]
+        derivativeEta = np.zeros((4, 4), float)
+        derivativeKsi = np.zeros((4, 4), float)
+        eta = [-1 / sqrt(3), -1 / sqrt(3), 1 / sqrt(3), 1 / sqrt(3)]
+        ksi = [-1 / sqrt(3), 1 / sqrt(3), 1 / sqrt(3), -1 / sqrt(3)]
+
+        for i in range(0, self.nodes_count):
+            for j in range(0, self.nodes_count):
+                if j == 0:
+                    derivativeEta[i][j] = -0.25 * (1 - eta[i])
+                    derivativeKsi[i][j] = (-0.25) * (1 - ksi[i])
+                elif j == 1:
+                    derivativeEta[i][j] = 0.25 * (1 - eta[i])
+                    derivativeKsi[i][j] = -0.25 * (1 + ksi[i])
+                elif j == 2:
+                    derivativeEta[i][j] = 0.25 * (1 + eta[i])
+                    derivativeKsi[i][j] = 0.25 * (1 + ksi[i])
+                elif j == 3:
+                    derivativeEta[i][j] = -0.25 * (1 + eta[i])
+                    derivativeKsi[i][j] = 0.25 * (1 - ksi[i])
+
+        jacobian = np.zeros((4, 4), float)
+        determinant = []
+        inv_jacobian = np.zeros((4, 4), float)
+
+        for i in range(0, self.nodes_count):
+            for j in range(0, self.nodes_count):
+                for k in range(0, self.nodes_count):
+                    if j == 0:
+                        jacobian[j][i] += derivativeEta[j][k] * x[k]
+                    elif j == 1:
+                        jacobian[j][i] += derivativeKsi[j][k] * x[k]
+                    elif j == 2:
+                        jacobian[j][i] += derivativeEta[j][k] * y[k]
+                    elif j == 3:
+                        jacobian[j][i] += derivativeKsi[j][k] * y[k]
+
+        for i in range(self.nodes_count):
+            determinant.append(jacobian[0][i] * jacobian[3][i] - jacobian[1][i] * jacobian[2][i])
+
+        k = 0
+        for i in range(self.nodes_count):
+            for j in range(3, -1, -1):
+                if k == 0 or k == 3:
+                    inv_jacobian[k][i] = jacobian[j][i] / determinant[i]
+                elif k == 1 or k == 2:
+                    inv_jacobian[k][i] = -jacobian[j][i] / determinant[i]
+                    if inv_jacobian[k][i] == -0.0:
+                        inv_jacobian[k][i] = 0.0
+                k += 1
+            k = 0
+        print("///////////X////////////")
+        print(x)
+        print("///////////Y////////////")
+        print(y)
+
+        print("//////////ETA///////////")
+        for i in range(self.nodes_count):
+            print(eta[i])
+
+        print("//////////KSI///////////")
+        for i in range(self.nodes_count):
+            print(ksi[i])
+
+        print('////////// POCHODNA FUNKCJI KSZTAŁTU ETA //////////')
+        for i in range(self.nodes_count):
+            print(derivativeEta[i])
+
+        print('////////// POCHODNA FUNKCJI KSZTAŁTU KSI //////////')
+        for i in range(self.nodes_count):
+            print(derivativeKsi[i])
+
+        print('////////// JACOBIAN //////////')
+        for i in range(self.nodes_count):
+            print(jacobian[i])
+
+        print('///////// DETERMINANT //////////')
+        for i in range(self.nodes_count):
+            print(determinant[i])
+
+        print('////////// INVERSE JACOBIAN //////////')
+        for i in range(self.nodes_count):
+            print(inv_jacobian[i])

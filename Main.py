@@ -1,5 +1,4 @@
 from MES import Node as n, GlobalData as g, Read as r, Plot as p, FEM_Grid as f, Element as e, Plot
-from math import sqrt
 
 
 # Labolatoria 1
@@ -68,5 +67,8 @@ def lab_2():
     print(element2.integral())
 
 
-lab_1()
-lab_2()
+# lab_1()
+# lab_2()
+
+element = e.Element(4)
+element.jacobian()
