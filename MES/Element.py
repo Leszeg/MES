@@ -57,8 +57,16 @@ class Element:
         y = [0, 0, 4, 4]
         derivativeEta = np.zeros((4, 4), float)
         derivativeKsi = np.zeros((4, 4), float)
-        eta = [-1 / sqrt(3), -1 / sqrt(3), 1 / sqrt(3), 1 / sqrt(3)]
-        ksi = [-1 / sqrt(3), 1 / sqrt(3), 1 / sqrt(3), -1 / sqrt(3)]
+
+        for i in range(4):
+            print(self.nodes[i].eta)
+
+        for i in range(4):
+            print(self.nodes[i].ksi)
+
+        eta = [self.nodes[0].eta, self.nodes[1].eta, self.nodes[3].eta, self.nodes[2].eta]
+        ksi = [self.nodes[0].ksi, self.nodes[1].ksi, self.nodes[3].ksi, self.nodes[2].ksi]
+
 
         for i in range(0, self.nodes_count):
             for j in range(0, self.nodes_count):
