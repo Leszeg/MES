@@ -23,18 +23,14 @@ def integral(fun_numb):
     tmp = 0
 
     if int(fun_numb) == 1:
-        first_node = -sqrt(3 / 5)
-        second_node = 0
-        third_node = sqrt(3 / 5)
-        nodes = [first_node, second_node, third_node]
-        Ak1 = 5 / 9
-        Ak2 = 8 / 9
-        fpc = []
-
-        for n in nodes:
-            fpc.append(2 * n ** 2 + 0.1 * n + 3)
-
-        return fpc[0] * Ak1 + fpc[1] * Ak2 + fpc[2] * Ak1
+        node_v = [-sqrt(3 / 5), 0, sqrt(3 / 5)]
+        Ak = [5 / 9, 8 / 9, 5 / 9]
+        for i in range(3):
+            nodes.append(Node(node_v[i], node_v[i]))
+            fpc.append(2 * nodes[i].x ** 2 + 0.1 * nodes[i].x + 3)
+            result = result + fpc[i] * Ak[i]
+            tmp += 1
+        return result
 
     elif int(fun_numb) == 2:
 
