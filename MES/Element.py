@@ -5,9 +5,11 @@ import numpy as np
 
 class Element:
 
-    def __init__(self, c):
+    def __init__(self, c, Id):
+        self.nodes_ID = list(Id)
         self.nodes = []
         self.nodes_count = c
+
         if c == 4:
             node_v = [-1 / sqrt(3), 1 / sqrt(3)]
             for j in range(2):
@@ -18,9 +20,6 @@ class Element:
             for j in range(3):
                 for i in range(3):
                     self.nodes.append(Node(node_v[i], node_v[j], 0, 0))
-
-    def kons(self, ID):
-        self.nodes_ID = ID
 
     def integral(self):
         result = 0

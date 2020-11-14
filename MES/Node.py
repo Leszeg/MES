@@ -1,3 +1,4 @@
+# Węzeł zawiera swoje współrzędne w układach globalnym i lokalnym
 class Node:
     def __init__(self, KSI, ETA, X, Y):
         self.ksi = float(KSI)
