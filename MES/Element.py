@@ -44,20 +44,20 @@ class Element:
             self.nodes[3].ksi = node_v[0]
             self.nodes[3].eta = node_v[1]
 
-            self.nodes[0].ksi = node_v[1]
-            self.nodes[0].eta = node_v[1]
+            self.nodes[4].ksi = node_v[1]
+            self.nodes[4].eta = node_v[1]
 
-            self.nodes[1].ksi = node_v[2]
-            self.nodes[1].eta = node_v[1]
+            self.nodes[5].ksi = node_v[2]
+            self.nodes[5].eta = node_v[1]
 
-            self.nodes[2].ksi = node_v[0]
-            self.nodes[2].eta = node_v[2]
+            self.nodes[6].ksi = node_v[0]
+            self.nodes[6].eta = node_v[2]
 
-            self.nodes[3].ksi = node_v[1]
-            self.nodes[3].eta = node_v[2]
+            self.nodes[7].ksi = node_v[1]
+            self.nodes[7].eta = node_v[2]
 
-            self.nodes[3].ksi = node_v[2]
-            self.nodes[3].eta = node_v[2]
+            self.nodes[8].ksi = node_v[2]
+            self.nodes[8].eta = node_v[2]
 
     def integral(self):
         result = 0
