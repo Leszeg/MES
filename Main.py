@@ -28,6 +28,12 @@ def lab_1():
     # Pętla for ma dodatek '+ int((global_data.nW) / 2)' ponieważ przy tworzeniu siatki
     # elementy muszą być odpowiednio numerowane i będą dodatkowe 'puste przebiegi'
     # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
+    a = 0
+    b = 5
+    c = 6
+    d = 1
+
+    # Tworzy TYLKO ELEMENTY CZTERO-WĘZŁOWE
     for i in range(global_data.nE + int((global_data.nW) / 2)):
         if helpp < global_data.nH - 1:
             ID = []
@@ -35,10 +41,12 @@ def lab_1():
             ID.append(ID[0] + global_data.nH)
             ID.append(ID[1] + 1)
             ID.append(ID[0] + 1)
-            elements.append(e.Element(4, ID))
+            nod = [nodes[a], nodes[b], nodes[c], nodes[d]]
+            elements.append(e.Element(4, ID, nod))
             helpp += 1
             j += 1
         else:
+            print("\n")
             j += 1
             helpp = 0
 
@@ -55,27 +63,37 @@ def lab_1():
 
     # Drukuje wykres siatki
     Plot.plot(global_data.nN, nodes)
-# Opisy klas:
-# FEM_Grid - zawiera listę elementów oraz węzłów
-#     Element nie zna współrzędnych swoich węzłów ale zna ich ID
-#     Węzły nie wiedzą do jakiego elementu należą i nie znają swojego ID
-#     Klasa FEM_Grid łączy ID węzłów z elementu z ich wartościami
-#     Jeżeli chcemy poznać współrzędne węzła z danego elementu musimy to zrobić poprzez klasę FEM_Grid
-# GlobalData - dane odczytane z pliku
-# Element - Zawiera
-#     tablice z ID swoich węzłów(nodes_ID)
-# Node - zawiera współrzędne punktów
-# Plot - drukuje wykres FEM_Grid
-# Read - czyta dane z pliku
+    # Opis:
+    # FEM_Grid - zawiera listę elementów oraz węzłów
+    #     Element zna współrzędne swoich punktów i ich ID
+    #     Węzły nie wiedzą do jakiego elementu należą i nie znają swojego ID
+    #     Klasa FEM_Grid rysuje siatkę na podstawie swojej listy elementów.
+    #     Lista w klasie Element jest używana tylko do obliczeń
+    # GlobalData - dane odczytane z pliku
+    # Element - Zawiera
+    #     tablice z ID swoich węzłów(nodes_ID)
+    #     tablice z współrzędnymi swoich węzłów(nodes)
+    #     zmienną informującą o ilości węzłów w elemencie
+    # Node - zawiera współrzędne punktów
+    # Plot - drukuje wykres FEM_Grid
+    # Read - czyta dane z pliku
+
+    # Lab 2 - całkowanie numeryczne
+    # Całkuje element 4 węzłowy
+    print(elements[0].integral())
+    no = []
+    for i in range(9):
+        no.append(n.Node(0, 0, 0, 0))
+    no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    element = e.Element(9, no1, no)
+    print(element.integral())
 
 
-# Labolatoria 2
-def lab_2():
-    element1 = e.Element(4)
-    element2 = e.Element(9)
-    print(element1.integral())
-    print(element2.integral())
-
+# Opis:
+# Całkując wykorzystuje zmienne w układzie lokalnym (ksi i eta)
+# Funkcje dla jakich liczę całki wpisywane w funkcji integral
+# Obiekt klasy element ma dodaną tablicę nodes w której na sztywno podałem współrzędne ksi i eta
+# Nie ma powiązania z wcześniejszymi labolatoriami jeżeli chodzi o węzły.
 
 def lab_3():
     element = e.Element(4)
@@ -149,5 +167,5 @@ def lab_5():
 lab_1()
 # lab_2()
 # lab_3()
-lab_4()
+# lab_4()
 # lab_5()

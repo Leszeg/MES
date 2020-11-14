@@ -5,21 +5,59 @@ import numpy as np
 
 class Element:
 
-    def __init__(self, c, Id):
+    def __init__(self, c, Id, nodes_c):
         self.nodes_ID = list(Id)
-        self.nodes = []
+
+        # Dodane na potrzeby całkowania informacja o ilości węzłów w elemencie
         self.nodes_count = c
 
+        self.nodes = nodes_c
+
         if c == 4:
+            # Na sztywno dodaje współrzędne ksi i eta do testowania
             node_v = [-1 / sqrt(3), 1 / sqrt(3)]
-            for j in range(2):
-                for i in range(2):
-                    self.nodes.append(Node(node_v[i], node_v[j], 0, 0))
+            self.nodes[0].ksi = node_v[0]
+            self.nodes[0].eta = node_v[0]
+
+            self.nodes[1].ksi = node_v[1]
+            self.nodes[1].eta = node_v[0]
+
+            self.nodes[2].ksi = node_v[1]
+            self.nodes[2].eta = node_v[1]
+
+            self.nodes[3].ksi = node_v[0]
+            self.nodes[3].eta = node_v[1]
+
         elif c == 9:
+            # Na sztywno dodaje współrzędne ksi i eta do testowania
             node_v = [-sqrt(3 / 5), 0, sqrt(3 / 5)]
-            for j in range(3):
-                for i in range(3):
-                    self.nodes.append(Node(node_v[i], node_v[j], 0, 0))
+
+            self.nodes[0].ksi = node_v[0]
+            self.nodes[0].eta = node_v[0]
+
+            self.nodes[1].ksi = node_v[1]
+            self.nodes[1].eta = node_v[0]
+
+            self.nodes[2].ksi = node_v[2]
+            self.nodes[2].eta = node_v[0]
+
+            self.nodes[3].ksi = node_v[0]
+            self.nodes[3].eta = node_v[1]
+
+            self.nodes[0].ksi = node_v[1]
+            self.nodes[0].eta = node_v[1]
+
+            self.nodes[1].ksi = node_v[2]
+            self.nodes[1].eta = node_v[1]
+
+            self.nodes[2].ksi = node_v[0]
+            self.nodes[2].eta = node_v[2]
+
+            self.nodes[3].ksi = node_v[1]
+            self.nodes[3].eta = node_v[2]
+
+            self.nodes[3].ksi = node_v[2]
+            self.nodes[3].eta = node_v[2]
 
     def integral(self):
         result = 0
@@ -29,9 +67,13 @@ class Element:
         if self.nodes_count == 4:
             # Dwa punkty 2D
             print('1. -2yx^2 + 2xy + 4')  # na zajęciach wyszło 16 dla 2 punktów
+
+            # Wagi
             Ak = [1, 1]
+
             for j in range(2):
                 for i in range(2):
+                    # Tutaj implementuje wzór z którego liczę całkę
                     fpc.append(
                         -2 * self.nodes[tmp].eta * self.nodes[tmp].ksi ** 2 + 2 * self.nodes[tmp].ksi *
                         self.nodes[
@@ -39,12 +81,17 @@ class Element:
                     result = result + fpc[tmp] * Ak[i] * Ak[j]
                     tmp += 1
             return result
+
         elif int(self.nodes_count) == 9:
             # Trzy punkty 2D
             print('2. -5yx^2 + 2xy^2 + 10')  # na zajęciach wyszło 40 dla 3 punktów
+
+            # Wagi
             Ak = [5 / 9, 8 / 9, 5 / 9]
+
             for j in range(3):
                 for i in range(3):
+                    # Tutaj implementuje wzór z którego liczę całkę
                     fpc.append(-5 * self.nodes[tmp].eta * self.nodes[tmp].ksi ** 2 + 2 * self.nodes[tmp].ksi *
                                self.nodes[tmp].eta ** 2 + 10)
                     result = result + fpc[tmp] * Ak[i] * Ak[j]
