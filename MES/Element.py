@@ -66,7 +66,7 @@ class Element:
 
         if self.nodes_count == 4:
             # Dwa punkty 2D
-            print('1. -2yx^2 + 2xy + 4')  # na zajęciach wyszło 16 dla 2 punktów
+            # print('1. -2yx^2 + 2xy + 4')  # na zajęciach wyszło 16 dla 2 punktów
 
             # Wagi
             Ak = [1, 1]
@@ -84,7 +84,7 @@ class Element:
 
         elif int(self.nodes_count) == 9:
             # Trzy punkty 2D
-            print('2. -5yx^2 + 2xy^2 + 10')  # na zajęciach wyszło 40 dla 3 punktów
+            # print('2. -5yx^2 + 2xy^2 + 10')  # na zajęciach wyszło 40 dla 3 punktów
 
             # Wagi
             Ak = [5 / 9, 8 / 9, 5 / 9]
@@ -99,61 +99,64 @@ class Element:
             return result
 
     def jacobian(self):
-        x = [0, 4, 4, 0]
-        y = [0, 0, 6, 6]
-        derivativeEta = np.zeros((4, 4), float)
-        derivativeKsi = np.zeros((4, 4), float)
+        # Współrzędne globalne elementu
+        x = [0, 0.025, 0.025, 0]
+        y = [0, 0, 0.025, 0.025]
+        # for i in range(4):
+        #     x.append(self.nodes[i].x)
+        #     y.append(self.nodes[i].y)
 
-        for i in range(4):
-            print(self.nodes[i].eta)
+        # Współrzędne lokalne elementu numeracja jak z siatką FEM
+        ksi = [self.nodes[0].ksi, self.nodes[1].ksi, self.nodes[2].ksi, self.nodes[3].ksi]
+        eta = [self.nodes[0].eta, self.nodes[1].eta, self.nodes[2].eta, self.nodes[3].eta]
 
-        for i in range(4):
-            print(self.nodes[i].ksi)
-
-        eta = [self.nodes[0].eta, self.nodes[1].eta, self.nodes[3].eta, self.nodes[2].eta]
-        ksi = [self.nodes[0].ksi, self.nodes[1].ksi, self.nodes[3].ksi, self.nodes[2].ksi]
-
+        # Obliczam pochodne funkcji kształtu po ksi i eta
+        dN_dKsi = np.zeros((4, 4), float)
+        dN_dEta = np.zeros((4, 4), float)
         for i in range(0, self.nodes_count):
             for j in range(0, self.nodes_count):
                 if j == 0:
-                    derivativeEta[i][j] = -0.25 * (1 - eta[i])
-                    derivativeKsi[i][j] = (-0.25) * (1 - ksi[i])
+                    dN_dKsi[j][i] = -0.25 * (1 - eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 - ksi[i])
                 elif j == 1:
-                    derivativeEta[i][j] = 0.25 * (1 - eta[i])
-                    derivativeKsi[i][j] = -0.25 * (1 + ksi[i])
+                    dN_dKsi[j][i] = 0.25 * (1 - eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 + ksi[i])
                 elif j == 2:
-                    derivativeEta[i][j] = 0.25 * (1 + eta[i])
-                    derivativeKsi[i][j] = 0.25 * (1 + ksi[i])
+                    dN_dKsi[j][i] = 0.25 * (1 + eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 + ksi[i])
                 elif j == 3:
-                    derivativeEta[i][j] = -0.25 * (1 + eta[i])
-                    derivativeKsi[i][j] = 0.25 * (1 - ksi[i])
+                    dN_dKsi[j][i] = -0.25 * (1 + eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 - ksi[i])
 
         jacobian = np.zeros((4, 4), float)
         determinant = []
         inv_jacobian = np.zeros((4, 4), float)
-
+        m = dN_dEta
+        dN_dEta = dN_dKsi
+        dN_dKsi = m
+        # Cztery jakobiany 2x2 ułożone wierszami
         for i in range(0, self.nodes_count):
             for j in range(0, self.nodes_count):
                 for k in range(0, self.nodes_count):
                     if j == 0:
-                        jacobian[j][i] += derivativeEta[j][k] * x[k]
+                        jacobian[i][j] += dN_dEta[k][j] * x[k]
                     elif j == 1:
-                        jacobian[j][i] += derivativeKsi[j][k] * x[k]
+                        jacobian[i][j] += dN_dKsi[k][j] * x[k]
                     elif j == 2:
-                        jacobian[j][i] += derivativeEta[j][k] * y[k]
+                        jacobian[i][j] += dN_dEta[k][j] * y[k]
                     elif j == 3:
-                        jacobian[j][i] += derivativeKsi[j][k] * y[k]
+                        jacobian[i][j] += dN_dKsi[k][j] * y[k]
 
         for i in range(self.nodes_count):
-            determinant.append(jacobian[0][i] * jacobian[3][i] - jacobian[1][i] * jacobian[2][i])
+            determinant.append(jacobian[i][0] * jacobian[i][3] - jacobian[i][1] * jacobian[i][2])
 
         k = 0
         for i in range(self.nodes_count):
             for j in range(3, -1, -1):
                 if k == 0 or k == 3:
-                    inv_jacobian[k][i] = jacobian[j][i] / determinant[i]
+                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i],3)
                 elif k == 1 or k == 2:
-                    inv_jacobian[k][i] = -jacobian[j][i] / determinant[i]
+                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i],3)
                 k += 1
             k = 0
         print("///////////X////////////")
@@ -169,13 +172,14 @@ class Element:
         for i in range(self.nodes_count):
             print(ksi[i])
 
+        # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dEta itd.
         print('////////// POCHODNA FUNKCJI KSZTAŁTU ETA //////////')
         for i in range(self.nodes_count):
-            print(derivativeEta[i])
-
+            print(dN_dKsi[i])
+        # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dKsi itd.
         print('////////// POCHODNA FUNKCJI KSZTAŁTU KSI //////////')
         for i in range(self.nodes_count):
-            print(derivativeKsi[i])
+            print(dN_dEta[i])
 
         print('////////// JACOBIAN //////////')
         for i in range(self.nodes_count):
@@ -189,94 +193,27 @@ class Element:
         for i in range(self.nodes_count):
             print(inv_jacobian[i])
 
-        dN_dx = np.zeros((4, 4), float)
-        for i in range(0, self.nodes_count):
-            k = 0
-            for j in range(2):
-                for l in range(2):
-                    dN_dx[i][k] = ((1 / determinant[0]) * (
-                            derivativeKsi[i][k] * jacobian[1][k] + derivativeEta[i][k] * (jacobian[3][k])))
-                    k += 1
-
-        print("////////// Pochodna funkcji kształtu X //////////")
-        for i in range(self.nodes_count):
-            print(dN_dx[i])
-        return jacobian, derivativeEta, derivativeKsi, determinant
+        return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian
 
     def H_matrix(self):
-
         data = self.jacobian()
         jacobian = data[0]
-        derivativeEta = data[1]
-        derivativeKsi = data[2]
+        dN_dEta = data[1]
+        dN_dKsi = data[2]
         determinant = data[3]
+        inv_jacobian = data[4]
+        dN_dY = np.zeros((4, 4), float)
+        dN_dX = np.zeros((4, 4), float)
+        for i in range(4):
+            for k in range(4):
+                dN_dX[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][0] + dN_dEta[i][k] * (inv_jacobian[0][1]))
+                dN_dY[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][2] + dN_dEta[i][k] * (inv_jacobian[0][3]))
 
-        jacSize = 2
-        One = np.zeros((jacSize, jacSize), float)
-        Two = np.zeros((jacSize, jacSize), float)
-        Three = np.zeros((jacSize, jacSize), float)
-        Four = np.zeros((jacSize, jacSize), float)
-        k = 0
+        print("dN_dX")
+        print(dN_dX)
 
-        for i in range(jacSize):
-            for j in range(jacSize):
-                One[j][i] = jacobian[k][0]
-                Two[j][i] = jacobian[k][1]
-                Three[j][i] = jacobian[k][2]
-                Four[j][i] = jacobian[k][3]
-                k += 1
-
-        dNdX = np.zeros((4, 4), float)
-        dNdY = np.zeros((4, 4), float)
-
-        dNdX[0][0] = (1 / determinant[0]) * (One[1][0] * derivativeEta[0][0] + One[1][1] * derivativeEta[0][0])
-        dNdX[0][1] = (1 / determinant[0]) * (One[1][0] * derivativeEta[0][1] + One[1][1] * derivativeEta[0][1])
-        dNdX[0][2] = (1 / determinant[0]) * (One[1][0] * derivativeEta[0][2] + One[1][1] * derivativeEta[0][2])
-        dNdX[0][3] = (1 / determinant[0]) * (One[1][0] * derivativeEta[0][3] + One[1][1] * derivativeEta[0][3])
-
-        dNdX[1][0] = (1 / determinant[1]) * (Two[1][0] * derivativeEta[1][0] + Two[1][1] * derivativeEta[1][0])
-        dNdX[1][1] = (1 / determinant[1]) * (Two[1][0] * derivativeEta[1][1] + Two[1][1] * derivativeEta[1][1])
-        dNdX[1][2] = (1 / determinant[1]) * (Two[1][0] * derivativeEta[1][2] + Two[1][1] * derivativeEta[1][2])
-        dNdX[1][3] = (1 / determinant[1]) * (Two[1][0] * derivativeEta[1][3] + Two[1][1] * derivativeEta[1][3])
-
-        dNdX[2][0] = (1 / determinant[2]) * (
-                Three[1][0] * derivativeEta[2][0] + Three[1][1] * derivativeEta[2][0])
-        dNdX[2][1] = (1 / determinant[2]) * (
-                Three[1][0] * derivativeEta[2][1] + Three[1][1] * derivativeEta[2][1])
-        dNdX[2][2] = (1 / determinant[2]) * (
-                Three[1][0] * derivativeEta[2][2] + Three[1][1] * derivativeEta[2][2])
-        dNdX[2][3] = (1 / determinant[2]) * (
-                Three[1][0] * derivativeEta[2][3] + Three[1][1] * derivativeEta[2][3])
-
-        dNdX[3][0] = (1 / determinant[3]) * (Four[1][0] * derivativeEta[3][0] + Four[1][1] * derivativeEta[3][0])
-        dNdX[3][1] = (1 / determinant[3]) * (Four[1][0] * derivativeEta[3][1] + Four[1][1] * derivativeEta[3][1])
-        dNdX[3][2] = (1 / determinant[3]) * (Four[1][0] * derivativeEta[3][2] + Four[1][1] * derivativeEta[3][2])
-        dNdX[3][3] = (1 / determinant[3]) * (Four[1][0] * derivativeEta[3][3] + Four[1][1] * derivativeEta[3][3])
-        ##################################################################################################
-        dNdY[0][0] = (1 / determinant[0]) * (One[0][0] * derivativeKsi[0][0] + One[0][1] * derivativeKsi[0][0])
-        dNdY[0][1] = (1 / determinant[0]) * (One[0][0] * derivativeKsi[0][1] + One[0][1] * derivativeKsi[0][1])
-        dNdY[0][2] = (1 / determinant[0]) * (One[0][0] * derivativeKsi[0][2] + One[0][1] * derivativeKsi[0][2])
-        dNdY[0][3] = (1 / determinant[0]) * (One[0][0] * derivativeKsi[0][3] + One[0][1] * derivativeKsi[0][3])
-
-        dNdY[1][0] = (1 / determinant[1]) * (Two[0][0] * derivativeKsi[1][0] + Two[0][1] * derivativeKsi[1][0])
-        dNdY[1][1] = (1 / determinant[1]) * (Two[0][0] * derivativeKsi[1][1] + Two[0][1] * derivativeKsi[1][1])
-        dNdY[1][2] = (1 / determinant[1]) * (Two[0][0] * derivativeKsi[1][2] + Two[0][1] * derivativeKsi[1][2])
-        dNdY[1][3] = (1 / determinant[1]) * (Two[0][0] * derivativeKsi[1][3] + Two[0][1] * derivativeKsi[1][3])
-
-        dNdY[2][0] = (1 / determinant[2]) * (
-                Three[0][0] * derivativeKsi[2][0] + Three[0][1] * derivativeKsi[2][0])
-        dNdY[2][1] = (1 / determinant[2]) * (
-                Three[0][0] * derivativeKsi[2][1] + Three[0][1] * derivativeKsi[2][1])
-        dNdY[2][2] = (1 / determinant[2]) * (
-                Three[0][0] * derivativeKsi[2][2] + Three[0][1] * derivativeKsi[2][2])
-        dNdY[2][3] = (1 / determinant[2]) * (
-                Three[0][0] * derivativeKsi[2][3] + Three[0][1] * derivativeKsi[2][3])
-
-        dNdY[3][0] = (1 / determinant[3]) * (Four[0][0] * derivativeKsi[3][0] + Four[0][1] * derivativeKsi[3][0])
-        dNdY[3][1] = (1 / determinant[3]) * (Four[0][0] * derivativeKsi[3][1] + Four[0][1] * derivativeKsi[3][1])
-        dNdY[3][2] = (1 / determinant[3]) * (Four[0][0] * derivativeKsi[3][2] + Four[0][1] * derivativeKsi[3][2])
-        dNdY[3][3] = (1 / determinant[3]) * (Four[0][0] * derivativeKsi[3][3] + Four[0][1] * derivativeKsi[3][3])
-
+        print("dN_dY")
+        print(dN_dY)
         dNdX1 = np.zeros((4, 4), float)
         dNdY1 = np.zeros((4, 4), float)
         dNdX2 = np.zeros((4, 4), float)
@@ -288,24 +225,24 @@ class Element:
 
         for i in range(0, 4):
             for j in range(0, 4):
-                dNdX1[i][j] = dNdX[0][i] * dNdX[0][j]
-                dNdY1[i][j] = dNdY[0][i] * dNdY[0][j]
+                dNdX1[i][j] = dN_dX[i][0] * dN_dX[j][0]
+                dNdY1[i][j] = dN_dY[i][0] * dN_dY[j][0]
 
         for i in range(0, 4):
             for j in range(0, 4):
-                dNdX2[i][j] = dNdX[1][i] * dNdX[1][j]
-                dNdY2[i][j] = dNdY[1][i] * dNdY[1][j]
+                dNdX2[i][j] = dN_dX[i][1] * dN_dX[j][1]
+                dNdY2[i][j] = dN_dY[i][1] * dN_dY[j][1]
 
         for i in range(0, 4):
             for j in range(0, 4):
-                dNdX3[i][j] = dNdX[2][i] * dNdX[2][j]
-                dNdY3[i][j] = dNdY[2][i] * dNdY[2][j]
+                dNdX3[i][j] = dN_dX[i][2] * dN_dX[j][2]
+                dNdY3[i][j] = dN_dY[i][2] * dN_dY[j][2]
 
         for i in range(0, 4):
             for j in range(0, 4):
-                dNdX4[i][j] = dNdX[3][i] * dNdX[3][j]
-                dNdY4[i][j] = dNdY[3][i] * dNdY[3][j]
-
+                dNdX4[i][j] = dN_dX[i][3] * dN_dX[j][3]
+                dNdY4[i][j] = dN_dY[i][3] * dN_dY[j][3]
+        print(dNdX1)
         for i in range(0, 4):
             for j in range(0, 4):
                 dNdX1[i][j] += dNdY1[i][j]
@@ -319,8 +256,7 @@ class Element:
                 H[i][j] = 30 * (dNdX1[i][j] + dNdX2[i][j] + dNdX3[i][j] + dNdX4[i][j]) * determinant[i]
 
         print("\n\n")
+
         print("////////// H //////////")
-        print(H[0])
-        print(H[1])
-        print(H[2])
-        print(H[3])
+        print(H)
+        return H

@@ -45,7 +45,6 @@ def main():
             helpp += 1
             j += 1
         else:
-            print("\n")
             j += 1
             helpp = 0
 
@@ -58,28 +57,34 @@ def main():
     for i in range(global_data.nE):
         print(f"Element {i}")
         for j in range(4):
-            print(fem_grid.ELEM[i].nodes_ID[j])
+           print(fem_grid.ELEM[i].nodes_ID[j])
 
     # Drukuje wykres siatki
-    Plot.plot(global_data.nN, nodes)
+   # Plot.plot(global_data.nN, nodes)
 
 
 
 # Lab 2
-    print(elements[0].integral())
+    #print(elements[0].integral())
     no = []
     for i in range(9):
         no.append(n.Node(0, 0, 0, 0))
     no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     element = e.Element(9, no1, no)
-    print(element.integral())
+    #print(element.integral())
 # Lab 3
-    elements[0].jacobian()
+    #elements[0].jacobian()
 
 # Lab 4
-    elements[0].H_matrix()
+    #elements[0].H_matrix()
 
 # Lab 5
-
+#     H = []
+#     J = []
+#     for i in range(12):
+#         J.append(elements[i].jacobian())
+#         H.append(elements[i].H_matrix())
+    # elements[0].jacobian()
+    elements[0].H_matrix()
 main()
 
