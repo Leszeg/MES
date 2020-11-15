@@ -1,6 +1,6 @@
 from math import sqrt
-from MES.Node import Node
 import numpy as np
+from MES.__init__ import global_data
 
 
 class Element:
@@ -100,11 +100,13 @@ class Element:
 
     def jacobian(self):
         # Współrzędne globalne elementu
-        x = [0, 0.025, 0.025, 0]
-        y = [0, 0, 0.025, 0.025]
-        # for i in range(4):
-        #     x.append(self.nodes[i].x)
-        #     y.append(self.nodes[i].y)
+        # x = [0, 0.025, 0.025, 0]
+        # y = [0, 0, 0.025, 0.025]
+        x = []
+        y = []
+        for i in range(4):
+            x.append(self.nodes[i].x)
+            y.append(self.nodes[i].y)
 
         # Współrzędne lokalne elementu numeracja jak z siatką FEM
         ksi = [self.nodes[0].ksi, self.nodes[1].ksi, self.nodes[2].ksi, self.nodes[3].ksi]
@@ -154,44 +156,44 @@ class Element:
         for i in range(self.nodes_count):
             for j in range(3, -1, -1):
                 if k == 0 or k == 3:
-                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i],3)
+                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i], 3)
                 elif k == 1 or k == 2:
-                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i],3)
+                    inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i], 3)
                 k += 1
             k = 0
-        print("///////////X////////////")
-        print(x)
-        print("///////////Y////////////")
-        print(y)
-
-        print("//////////ETA///////////")
-        for i in range(self.nodes_count):
-            print(eta[i])
-
-        print("//////////KSI///////////")
-        for i in range(self.nodes_count):
-            print(ksi[i])
-
-        # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dEta itd.
-        print('////////// POCHODNA FUNKCJI KSZTAŁTU ETA //////////')
-        for i in range(self.nodes_count):
-            print(dN_dKsi[i])
-        # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dKsi itd.
-        print('////////// POCHODNA FUNKCJI KSZTAŁTU KSI //////////')
-        for i in range(self.nodes_count):
-            print(dN_dEta[i])
-
-        print('////////// JACOBIAN //////////')
-        for i in range(self.nodes_count):
-            print(jacobian[i])
-
-        print('///////// DETERMINANT //////////')
-        for i in range(self.nodes_count):
-            print(determinant[i])
-
-        print('////////// INVERSE JACOBIAN //////////')
-        for i in range(self.nodes_count):
-            print(inv_jacobian[i])
+        # print("///////////X////////////")
+        # print(x)
+        # print("///////////Y////////////")
+        # print(y)
+        #
+        # print("//////////ETA///////////")
+        # for i in range(self.nodes_count):
+        #     print(eta[i])
+        #
+        # print("//////////KSI///////////")
+        # for i in range(self.nodes_count):
+        #     print(ksi[i])
+        #
+        # # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dEta itd.
+        # print('////////// POCHODNA FUNKCJI KSZTAŁTU ETA //////////')
+        # for i in range(self.nodes_count):
+        #     print(dN_dKsi[i])
+        # # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dKsi itd.
+        # print('////////// POCHODNA FUNKCJI KSZTAŁTU KSI //////////')
+        # for i in range(self.nodes_count):
+        #     print(dN_dEta[i])
+        #
+        # print('////////// JACOBIAN //////////')
+        # for i in range(self.nodes_count):
+        #     print(jacobian[i])
+        #
+        # print('///////// DETERMINANT //////////')
+        # for i in range(self.nodes_count):
+        #     print(determinant[i])
+        #
+        # print('////////// INVERSE JACOBIAN //////////')
+        # for i in range(self.nodes_count):
+        #     print(inv_jacobian[i])
 
         return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian
 
@@ -209,11 +211,6 @@ class Element:
                 dN_dX[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][0] + dN_dEta[i][k] * (inv_jacobian[0][1]))
                 dN_dY[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][2] + dN_dEta[i][k] * (inv_jacobian[0][3]))
 
-        print("dN_dX")
-        print(dN_dX)
-
-        print("dN_dY")
-        print(dN_dY)
         dNdX1 = np.zeros((4, 4), float)
         dNdY1 = np.zeros((4, 4), float)
         dNdX2 = np.zeros((4, 4), float)
@@ -242,7 +239,7 @@ class Element:
             for j in range(0, 4):
                 dNdX4[i][j] = dN_dX[i][3] * dN_dX[j][3]
                 dNdY4[i][j] = dN_dY[i][3] * dN_dY[j][3]
-        print(dNdX1)
+
         for i in range(0, 4):
             for j in range(0, 4):
                 dNdX1[i][j] += dNdY1[i][j]
@@ -253,7 +250,7 @@ class Element:
         H = np.zeros((4, 4), float)
         for i in range(0, 4):
             for j in range(0, 4):
-                H[i][j] = 30 * (dNdX1[i][j] + dNdX2[i][j] + dNdX3[i][j] + dNdX4[i][j]) * determinant[i]
+                H[i][j] = global_data.k * (dNdX1[i][j] + dNdX2[i][j] + dNdX3[i][j] + dNdX4[i][j]) * determinant[i]
 
         print("\n\n")
 
