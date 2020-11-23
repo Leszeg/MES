@@ -101,14 +101,12 @@ class Element:
     def jacobian(self):
 
         # Współrzędne globalne elementu
-        x = [0, 4, 4, 0]
-        y = [0, 0, 6, 6]
 
-        # x = []
-        # y = []
-        # for i in range(4):
-        #     x.append(self.nodes[i].x)
-        #     y.append(self.nodes[i].y)
+        x = []
+        y = []
+        for i in range(4):
+            x.append(self.nodes[i].x)
+            y.append(self.nodes[i].y)
 
         # Współrzędne lokalne elementu numeracja jak z siatką FEM
         ksi = []
@@ -239,15 +237,10 @@ class Element:
         k = 0
 
 
-        dN_dX = dN_dKsi * inv_jac[0][0] + dN_dEta * inv_jac[0][1]
-        dN_dY = dN_dKsi * inv_jac[0][2] + dN_dEta * inv_jac[0][3]
-
-        # for i in range(9):
-        #     for j in range(4):
-        #         dN_dX[j][i] = (dN_dKsi[j][k] * inv_jac[0][0] + dN_dEta[j][k] * (inv_jac[0][1]))
-        #         dN_dY[j][i] = (dN_dKsi[j][k] * inv_jac[0][2] + dN_dEta[j][k] * (inv_jac[0][3]))
-        #         k += 1
-        # k = 0
+        for i in range(4):
+            for k in range(self.integration_points_count):
+                dN_dX[i][k] = (dN_dKsi[i][k] * inv_jac[0][0] + dN_dEta[i][k] * (inv_jac[0][1]))
+                dN_dY[i][k] = (dN_dKsi[i][k] * inv_jac[0][2] + dN_dEta[i][k] * (inv_jac[0][3]))
 
         H = []
         for i in range(self.integration_points_count):

@@ -54,7 +54,7 @@ def main():
             ID.append(ID[1] + 1)
             ID.append(ID[0] + 1)
             nod = [nodes[a], nodes[b], nodes[c], nodes[d]]
-            elements.append(e.Element(4, ID, nod))
+            elements.append(e.Element(9, ID, nod))
             helpp += 1
             j += 1
         else:
@@ -73,7 +73,7 @@ def main():
     #        print(fem_grid.ELEM[i].nodes_ID[j])
 
     # Drukuje wykres siatki
-    # Plot.plot(global_data.nN, nodes)
+    Plot.plot(global_data.nN, nodes)
 
     # Lab 2
     # print(elements[0].integral())
@@ -91,16 +91,16 @@ def main():
     elements[0].H_matrix()
 
     # Lab 5
-    # H = []
-    # for i in range(len(elements)):
-    #     H.append(elements[i].H_matrix())
-    # hg = H_global(H, elements)
-    # print('the end')
+    H = []
+    for i in range(len(elements)):
+        H.append(elements[i].H_matrix())
+    hg = H_global(H, elements)
+    print('the end')
 
-    no = []
-    for i in range(4):
-        no.append(n.Node(0, 0))
-    no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    element = e.Element(9, no1, no)
-    element.H_matrix()
+    # no = []
+    # for i in range(4):
+    #     no.append(n.Node(0, 0))
+    # no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    # element = e.Element(9, no1, no)
+    # element.H_matrix()
 main()
