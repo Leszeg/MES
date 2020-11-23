@@ -32,7 +32,7 @@ def main():
     # Tworzenie współrzędnych węzłów (dwie pierwsze zerowe współrzędne to ksi i eta)
     for i1 in range(global_data.nW):
         for j1 in range(global_data.nH):
-            nodes.append(n.Node(0, 0, round(i1 * d_x, 4), round(j1 * d_y, 4)))
+            nodes.append(n.Node(round(i1 * d_x, 4), round(j1 * d_y, 4)))
 
     helpp = 0
     j = 0

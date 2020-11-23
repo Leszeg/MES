@@ -1,7 +1,7 @@
 from math import sqrt
 import numpy as np
 from MES.__init__ import global_data
-
+from MES import IntegrationPoint as IP
 
 class Element:
 
@@ -9,62 +9,72 @@ class Element:
         self.nodes_ID = list(Id)
 
         # Dodane na potrzeby całkowania informacja o ilości węzłów w elemencie
-        self.nodes_count = c
+        self.integration_points_count = c
 
         self.nodes = nodes_c
 
         if c == 4:
-            # Na sztywno dodaje współrzędne ksi i eta do testowania
             node_v = [-1 / sqrt(3), 1 / sqrt(3)]
-            self.nodes[0].ksi = node_v[0]
-            self.nodes[0].eta = node_v[0]
+            self.integration_points = []
 
-            self.nodes[1].ksi = node_v[1]
-            self.nodes[1].eta = node_v[0]
+            for i in range(self.integration_points_count):
+                self.integration_points.append(IP.IntegrationPoint())
 
-            self.nodes[2].ksi = node_v[1]
-            self.nodes[2].eta = node_v[1]
+            self.integration_points[0].ksi = node_v[0]
+            self.integration_points[0].eta = node_v[0]
 
-            self.nodes[3].ksi = node_v[0]
-            self.nodes[3].eta = node_v[1]
+            self.integration_points[1].ksi = node_v[1]
+            self.integration_points[1].eta = node_v[0]
+
+            self.integration_points[2].ksi = node_v[1]
+            self.integration_points[2].eta = node_v[1]
+
+            self.integration_points[3].ksi = node_v[0]
+            self.integration_points[3].eta = node_v[1]
 
         elif c == 9:
-            # Na sztywno dodaje współrzędne ksi i eta do testowania
             node_v = [-sqrt(3 / 5), 0, sqrt(3 / 5)]
+            self.integration_points = []
 
-            self.nodes[0].ksi = node_v[0]
-            self.nodes[0].eta = node_v[0]
+            for i in range(self.integration_points_count):
+                self.integration_points.append(IP.IntegrationPoint())
 
-            self.nodes[1].ksi = node_v[1]
-            self.nodes[1].eta = node_v[0]
+            self.integration_points[0].ksi = node_v[0]
+            self.integration_points[0].eta = node_v[0]
 
-            self.nodes[2].ksi = node_v[2]
-            self.nodes[2].eta = node_v[0]
+            self.integration_points[1].ksi = node_v[1]
+            self.integration_points[1].eta = node_v[0]
 
-            self.nodes[3].ksi = node_v[0]
-            self.nodes[3].eta = node_v[1]
+            self.integration_points[2].ksi = node_v[2]
+            self.integration_points[2].eta = node_v[0]
 
-            self.nodes[4].ksi = node_v[1]
-            self.nodes[4].eta = node_v[1]
+            self.integration_points[3].ksi = node_v[0]
+            self.integration_points[3].eta = node_v[1]
 
-            self.nodes[5].ksi = node_v[2]
-            self.nodes[5].eta = node_v[1]
+            self.integration_points[4].ksi = node_v[1]
+            self.integration_points[4].eta = node_v[1]
 
-            self.nodes[6].ksi = node_v[0]
-            self.nodes[6].eta = node_v[2]
+            self.integration_points[5].ksi = node_v[2]
+            self.integration_points[5].eta = node_v[1]
 
-            self.nodes[7].ksi = node_v[1]
-            self.nodes[7].eta = node_v[2]
+            self.integration_points[6].ksi = node_v[0]
+            self.integration_points[6].eta = node_v[2]
 
-            self.nodes[8].ksi = node_v[2]
-            self.nodes[8].eta = node_v[2]
+            self.integration_points[7].ksi = node_v[1]
+            self.integration_points[7].eta = node_v[2]
+
+            self.integration_points[8].ksi = node_v[2]
+            self.integration_points[8].eta = node_v[2]
+
+        elif c == 16:
+            pass
 
     def integral(self, H_matrix):
         result = []
         fpc = []
         tmp = 0
 
-        if self.nodes_count == 4:
+        if self.integration_points_count == 4:
             # Wagi
             Ak = [1, 1]
 
@@ -76,7 +86,7 @@ class Element:
 
             return result
 
-        elif int(self.nodes_count) == 9:
+        elif int(self.integration_points_count) == 9:
             # Trzy punkty 2D
             # print('2. -5yx^2 + 2xy^2 + 10')  # na zajęciach wyszło 40 dla 3 punktów
 
@@ -101,14 +111,14 @@ class Element:
             y.append(self.nodes[i].y)
 
         # Współrzędne lokalne elementu numeracja jak z siatką FEM
-        ksi = [self.nodes[0].ksi, self.nodes[1].ksi, self.nodes[2].ksi, self.nodes[3].ksi]
-        eta = [self.nodes[0].eta, self.nodes[1].eta, self.nodes[2].eta, self.nodes[3].eta]
+        ksi = [self.integration_points[0].ksi, self.integration_points[1].ksi, self.integration_points[2].ksi, self.integration_points[3].ksi]
+        eta = [self.integration_points[0].eta, self.integration_points[1].eta, self.integration_points[2].eta, self.integration_points[3].eta]
 
         # Obliczam pochodne funkcji kształtu po ksi i eta
         dN_dKsi = np.zeros((4, 4), float)
         dN_dEta = np.zeros((4, 4), float)
-        for i in range(0, self.nodes_count):
-            for j in range(0, self.nodes_count):
+        for i in range(0, self.integration_points_count):
+            for j in range(0, self.integration_points_count):
                 if j == 0:
                     dN_dKsi[j][i] = -0.25 * (1 - eta[i])
                     dN_dEta[j][i] = -0.25 * (1 - ksi[i])
@@ -130,9 +140,9 @@ class Element:
         dN_dKsi = m
 
         # Cztery jakobiany 2x2 ułożone wierszami
-        for i in range(0, self.nodes_count):
-            for j in range(0, self.nodes_count):
-                for k in range(0, self.nodes_count):
+        for i in range(0, self.integration_points_count):
+            for j in range(0, self.integration_points_count):
+                for k in range(0, self.integration_points_count):
                     if j == 0:
                         jacobian[i][j] += dN_dEta[k][j] * x[k]
                     elif j == 1:
@@ -142,11 +152,27 @@ class Element:
                     elif j == 3:
                         jacobian[i][j] += dN_dKsi[k][j] * y[k]
 
-        for i in range(self.nodes_count):
+        for i in range(self.integration_points_count):
             determinant.append(jacobian[i][0] * jacobian[i][3] - jacobian[i][1] * jacobian[i][2])
 
+        # tmp_jacobian = np.zeros((2, 2), float)
+        #
+        # tmp_jacobian[0][0] = jacobian[0][0]
+        # tmp_jacobian[0][1] = jacobian[0][1]
+        # tmp_jacobian[1][0] = jacobian[0][2]
+        # tmp_jacobian[1][1] = jacobian[0][3]
+        #
+        # xD = np.linalg.inv(tmp_jacobian)
+        # tmp2 = np.zeros((1, 4), float)
+        #
+        # tmp2[0][0] = xD[0][0]
+        # tmp2[0][1] = xD[0][1]
+        # tmp2[0][2] = xD[1][0]
+        # tmp2[0][3] = xD[1][1]
+
+
         k = 0
-        for i in range(self.nodes_count):
+        for i in range(self.integration_points_count):
             for j in range(3, -1, -1):
                 if k == 0 or k == 3:
                     inv_jacobian[i][k] = round(jacobian[i][j] / determinant[i], 3)
@@ -160,32 +186,32 @@ class Element:
         # print(y)
         #
         # print("//////////ETA///////////")
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(eta[i])
         #
         # print("//////////KSI///////////")
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(ksi[i])
         #
         # # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dEta itd.
         # print('////////// POCHODNA FUNKCJI KSZTAŁTU ETA //////////')
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(dN_dKsi[i])
         # # Pochodne w macierzy ułożone wierszami - pierwszy wiersz - dN1_dKsi itd.
         # print('////////// POCHODNA FUNKCJI KSZTAŁTU KSI //////////')
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(dN_dEta[i])
         #
         # print('////////// JACOBIAN //////////')
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(jacobian[i])
         #
         # print('///////// DETERMINANT //////////')
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(determinant[i])
         #
         # print('////////// INVERSE JACOBIAN //////////')
-        # for i in range(self.nodes_count):
+        # for i in range(self.integration_points_count):
         #     print(inv_jacobian[i])
 
         return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian
