@@ -236,7 +236,6 @@ class Element:
         # W jednym wierszu mamy wartości jednej funkcji kształtu we wszystkich punktach całkowania
         k = 0
 
-
         for i in range(4):
             for k in range(self.integration_points_count):
                 dN_dX[i][k] = (dN_dKsi[i][k] * inv_jac[0][0] + dN_dEta[i][k] * (inv_jac[0][1]))
