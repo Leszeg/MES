@@ -1,12 +1,11 @@
 from MES import Node as n, FEM_Grid as f, Element as e, Plot
-import numpy as np
+from numpy import zeros
 from MES.__init__ import global_data
-
 
 
 def H_global(H_locals, elements):
     r = global_data.nW * global_data.nH
-    Hg = np.zeros((r, r), float)
+    Hg = zeros((r, r), float)
     h1 = []
     for k in range(len(elements)):
         h1 = H_locals[k]

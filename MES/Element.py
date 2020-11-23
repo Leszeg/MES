@@ -59,27 +59,21 @@ class Element:
             self.nodes[8].ksi = node_v[2]
             self.nodes[8].eta = node_v[2]
 
-    def integral(self):
-        result = 0
+    def integral(self, H_matrix):
+        result = []
         fpc = []
         tmp = 0
 
         if self.nodes_count == 4:
-            # Dwa punkty 2D
-            # print('1. -2yx^2 + 2xy + 4')  # na zajęciach wyszło 16 dla 2 punktów
-
             # Wagi
             Ak = [1, 1]
 
-            for j in range(2):
-                for i in range(2):
-                    # Tutaj implementuje wzór z którego liczę całkę
-                    fpc.append(
-                        -2 * self.nodes[tmp].eta * self.nodes[tmp].ksi ** 2 + 2 * self.nodes[tmp].ksi *
-                        self.nodes[
-                            tmp].eta + 4)
-                    result = result + fpc[tmp] * Ak[i] * Ak[j]
-                    tmp += 1
+            k = 0
+            for i in range(2):
+                for j in range(2):
+                    result.append(H_matrix[k] * Ak[i] * Ak[j])
+                    k += 1
+
             return result
 
         elif int(self.nodes_count) == 9:
@@ -100,8 +94,6 @@ class Element:
 
     def jacobian(self):
         # Współrzędne globalne elementu
-        # x = [0, 0.025, 0.025, 0]
-        # y = [0, 0, 0.025, 0.025]
         x = []
         y = []
         for i in range(4):
@@ -136,6 +128,7 @@ class Element:
         m = dN_dEta
         dN_dEta = dN_dKsi
         dN_dKsi = m
+
         # Cztery jakobiany 2x2 ułożone wierszami
         for i in range(0, self.nodes_count):
             for j in range(0, self.nodes_count):
@@ -199,61 +192,32 @@ class Element:
 
     def H_matrix(self):
         data = self.jacobian()
-        jacobian = data[0]
         dN_dEta = data[1]
         dN_dKsi = data[2]
         determinant = data[3]
-        inv_jacobian = data[4]
+        inv_jac = data[4]
         dN_dY = np.zeros((4, 4), float)
         dN_dX = np.zeros((4, 4), float)
+
+        # Wiersz - funkcja kształtu
+        # Koluma - Punkt całkowania
+        # W jednym wierszu mamy wartości jednej funkcji kształtu we wszystkich punktach całkowania
         for i in range(4):
             for k in range(4):
-                dN_dX[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][0] + dN_dEta[i][k] * (inv_jacobian[0][1]))
-                dN_dY[i][k] = (dN_dKsi[i][k] * inv_jacobian[0][2] + dN_dEta[i][k] * (inv_jacobian[0][3]))
+                dN_dX[i][k] = (dN_dKsi[i][k] * inv_jac[0][0] + dN_dEta[i][k] * (inv_jac[0][1]))
+                dN_dY[i][k] = (dN_dKsi[i][k] * inv_jac[0][2] + dN_dEta[i][k] * (inv_jac[0][3]))
 
-        dNdX1 = np.zeros((4, 4), float)
-        dNdY1 = np.zeros((4, 4), float)
-        dNdX2 = np.zeros((4, 4), float)
-        dNdY2 = np.zeros((4, 4), float)
-        dNdX3 = np.zeros((4, 4), float)
-        dNdY3 = np.zeros((4, 4), float)
-        dNdX4 = np.zeros((4, 4), float)
-        dNdY4 = np.zeros((4, 4), float)
-
+        H = []
         for i in range(0, 4):
-            for j in range(0, 4):
-                dNdX1[i][j] = dN_dX[i][0] * dN_dX[j][0]
-                dNdY1[i][j] = dN_dY[i][0] * dN_dY[j][0]
+            tmp1 = np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * determinant[i]
+            tmp2 = np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * determinant[i]
+            H.append(global_data.k * (tmp1 + tmp2))
 
-        for i in range(0, 4):
-            for j in range(0, 4):
-                dNdX2[i][j] = dN_dX[i][1] * dN_dX[j][1]
-                dNdY2[i][j] = dN_dY[i][1] * dN_dY[j][1]
+        H_almost_end = self.integral(H)
 
-        for i in range(0, 4):
-            for j in range(0, 4):
-                dNdX3[i][j] = dN_dX[i][2] * dN_dX[j][2]
-                dNdY3[i][j] = dN_dY[i][2] * dN_dY[j][2]
-
-        for i in range(0, 4):
-            for j in range(0, 4):
-                dNdX4[i][j] = dN_dX[i][3] * dN_dX[j][3]
-                dNdY4[i][j] = dN_dY[i][3] * dN_dY[j][3]
-
-        for i in range(0, 4):
-            for j in range(0, 4):
-                dNdX1[i][j] += dNdY1[i][j]
-                dNdX2[i][j] += dNdY2[i][j]
-                dNdX3[i][j] += dNdY3[i][j]
-                dNdX4[i][j] += dNdY4[i][j]
-
-        H = np.zeros((4, 4), float)
-        for i in range(0, 4):
-            for j in range(0, 4):
-                H[i][j] = global_data.k * (dNdX1[i][j] + dNdX2[i][j] + dNdX3[i][j] + dNdX4[i][j]) * determinant[i]
+        H_end = (H_almost_end[0] + H_almost_end[1] + H_almost_end[2] + H_almost_end[3])
 
         print("\n\n")
-
         print("////////// H //////////")
-        print(H)
-        return H
+        print(H_end)
+        return H_end
