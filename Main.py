@@ -73,28 +73,34 @@ def main():
     #        print(fem_grid.ELEM[i].nodes_ID[j])
 
     # Drukuje wykres siatki
-    Plot.plot(global_data.nN, nodes)
+    # Plot.plot(global_data.nN, nodes)
 
     # Lab 2
     # print(elements[0].integral())
     # no = []
     # for i in range(9):
-    #     no.append(n.Node(0, 0, 0, 0))
+    #     no.append(n.Node(0, 0))
     # no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     # element = e.Element(9, no1, no)
     # print(element.integral())
+
     # Lab 3
     # elements[0].jacobian()
 
     # Lab 4
-    # elements[0].H_matrix()
+    elements[0].H_matrix()
 
     # Lab 5
-    H = []
-    for i in range(len(elements)):
-        H.append(elements[i].H_matrix())
-    hg = H_global(H, elements)
-    print('the end')
+    # H = []
+    # for i in range(len(elements)):
+    #     H.append(elements[i].H_matrix())
+    # hg = H_global(H, elements)
+    # print('the end')
 
-
+    no = []
+    for i in range(4):
+        no.append(n.Node(0, 0))
+    no1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    element = e.Element(9, no1, no)
+    element.H_matrix()
 main()
