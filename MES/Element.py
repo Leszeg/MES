@@ -10,7 +10,7 @@ class Element:
         self.nodes_ID = list(Id)
 
         # Dodane na potrzeby całkowania informacja o ilości węzłów w elemencie
-        self.integration_points_count = c
+        self.integration_points_count = int(c)
 
         self.nodes = nodes_c
 
@@ -319,3 +319,42 @@ class Element:
         print("////////// H //////////")
         print(H_end)
         return H_end
+
+    def C_matrix(self):
+        data = self.jacobian()
+        dN_dEta = data[1]
+        dN_dKsi = data[2]
+        determinant = data[3]
+        inv_jac = data[4]
+        ksi = []
+        eta = []
+        for i in range(self.integration_points_count):
+            ksi.append(self.integration_points[i].ksi)
+            eta.append(self.integration_points[i].eta)
+
+        N = np.zeros((4, self.integration_points_count), float)
+        for i in range(int(self.integration_points_count)):
+            for j in range(4):
+                if j == 0:
+                    N[j][i] = 0.25 * (1 - ksi[i]) * (1 - eta[i])
+                elif j == 1:
+                    N[j][i] = 0.25 * (1 + ksi[i]) * (1 - eta[i])
+                elif j == 2:
+                    N[j][i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
+                elif j == 3:
+                    N[j][i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
+
+        C = []
+        for i in range(self.integration_points_count):
+            tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * determinant[i]
+            C.append(global_data.c * global_data.ro * tmp1)
+
+        C_almost_end = self.integral(C)
+        C_end = 0
+        for i in range(self.integration_points_count):
+            C_end += C_almost_end[i]
+
+        print("\n\n")
+        print("////////// C //////////")
+        print(C_end)
+        return C_end

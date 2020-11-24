@@ -4,4 +4,4 @@ from MES import Read, GlobalData as g
 data = Read.read()
 
 # Laduje do klasy GlobalData
-global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"])
+global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"], data["ro"], data["c"], data["t0"])
