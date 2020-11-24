@@ -1,6 +1,6 @@
+from MES import global_data
 from math import sqrt
 import numpy as np
-from MES.__init__ import global_data
 from MES import IntegrationPoint as IP
 
 
