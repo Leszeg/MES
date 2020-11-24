@@ -23,9 +23,9 @@ class FEM_Grid:
         fig = plt.figure()
         ax = fig.add_subplot(1, 1, 1)
 
-        for i in range(nN):
-            plt.scatter(nodes[i].x, nodes[i].y, color='blue')
-            plt.annotate(i, (nodes[i].x, nodes[i].y))
+        for i in range(global_data.nN):
+            plt.scatter(self.ND[i].x, self.ND[i].y, color='blue')
+            plt.annotate(i, (self.ND[i].x, self.ND[i].y))
 
         major_ticks_x = arange(0, 0.1, 0.0333)
         major_ticks_y = arange(0, 0.21, 0.05)
