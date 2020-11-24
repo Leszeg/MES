@@ -68,7 +68,59 @@ class Element:
             self.integration_points[8].eta = node_v[2]
 
         elif c == 16:
-            pass
+            node_v = [-0.861136, -0.339981, 0.339981, 0.861136]
+            self.integration_points = []
+
+            for i in range(self.integration_points_count):
+                self.integration_points.append(IP.IntegrationPoint())
+
+            self.integration_points[0].ksi = node_v[0]
+            self.integration_points[0].eta = node_v[0]
+
+            self.integration_points[1].ksi = node_v[1]
+            self.integration_points[1].eta = node_v[0]
+
+            self.integration_points[2].ksi = node_v[2]
+            self.integration_points[2].eta = node_v[0]
+
+            self.integration_points[3].ksi = node_v[3]
+            self.integration_points[3].eta = node_v[0]
+
+            self.integration_points[4].ksi = node_v[0]
+            self.integration_points[4].eta = node_v[1]
+
+            self.integration_points[5].ksi = node_v[1]
+            self.integration_points[5].eta = node_v[1]
+
+            self.integration_points[6].ksi = node_v[2]
+            self.integration_points[6].eta = node_v[1]
+
+            self.integration_points[7].ksi = node_v[3]
+            self.integration_points[7].eta = node_v[1]
+
+            self.integration_points[8].ksi = node_v[0]
+            self.integration_points[8].eta = node_v[2]
+
+            self.integration_points[9].ksi = node_v[1]
+            self.integration_points[9].eta = node_v[2]
+
+            self.integration_points[10].ksi = node_v[2]
+            self.integration_points[10].eta = node_v[2]
+
+            self.integration_points[11].ksi = node_v[3]
+            self.integration_points[11].eta = node_v[2]
+
+            self.integration_points[12].ksi = node_v[0]
+            self.integration_points[12].eta = node_v[3]
+
+            self.integration_points[13].ksi = node_v[1]
+            self.integration_points[13].eta = node_v[3]
+
+            self.integration_points[14].ksi = node_v[2]
+            self.integration_points[14].eta = node_v[3]
+
+            self.integration_points[15].ksi = node_v[3]
+            self.integration_points[15].eta = node_v[3]
 
     def integral(self, H_matrix):
         result = []
@@ -94,6 +146,17 @@ class Element:
 
             for j in range(3):
                 for i in range(3):
+                    result.append(H_matrix[k] * Ak[i] * Ak[j])
+                    k += 1
+            return result
+
+        elif int(self.integration_points_count) == 16:
+            # Wagi
+            Ak = [0.347855, 0.652145, 0.652145, 0.347855]
+            k = 0
+
+            for j in range(4):
+                for i in range(4):
                     result.append(H_matrix[k] * Ak[i] * Ak[j])
                     k += 1
             return result

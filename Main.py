@@ -54,7 +54,7 @@ def main():
             ID.append(ID[1] + 1)
             ID.append(ID[0] + 1)
             nod = [nodes[a], nodes[b], nodes[c], nodes[d]]
-            elements.append(e.Element(9, ID, nod))
+            elements.append(e.Element(16, ID, nod))
             helpp += 1
             j += 1
         else:
