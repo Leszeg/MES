@@ -24,8 +24,6 @@ class Element:
         integration_points = []
 
         # Odpowiednie współrzędne lokalne w zależności od ilości punktów
-        if self.integration_points_count == 1:
-            node_v = [1, 2, 3]
         if self.integration_points_count == 4:
             node_v = [-1 / sqrt(3), 1 / sqrt(3)]
 

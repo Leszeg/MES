@@ -4,7 +4,7 @@ from MES import Read, GlobalData as g
 data = Read.read()
 
 # Laduje do klasy GlobalData
-global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"], data["ro"], data["c"], data["t0"])
+global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"],data["pc"], data["ro"], data["c"], data["t0"])
 
 from MES import Node as n, FEM_Grid as f, Element as e
 
@@ -39,11 +39,19 @@ for i in range(global_data.nE + int((global_data.nW) / 2)):
         ID.append(ID[1] + 1)
         ID.append(ID[0] + 1)
         nod = [nodes[a], nodes[b], nodes[c], nodes[d]]
-        elements.append(e.Element(9, ID, nod))
+        elements.append(e.Element(global_data.pc, ID, nod))
         helpp += 1
         j += 1
+        a+=1
+        b+=1
+        c+=1
+        d+=1
     else:
+        a+=1
+        b+=1
+        c+=1
+        d+=1
         j += 1
         helpp = 0
 
-grid = f.FEM_Grid(nodes, elements)
+grid = f.FEM_Grid(elements)

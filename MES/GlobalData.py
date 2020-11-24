@@ -1,6 +1,6 @@
 class GlobalData:
 
-    def __init__(self, w, h, nh, nw, K, RO, C, T0):
+    def __init__(self, w, h, nh, nw, K, PC, RO, C, T0, ):
         self.W = float(w)
         self.H = float(h)
         self.nH = int(nh)
@@ -11,3 +11,4 @@ class GlobalData:
         self.ro = float(RO)
         self.c = float(C)
         self.t0 = int(T0)
+        self.pc = int(PC)
