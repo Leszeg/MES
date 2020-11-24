@@ -19,8 +19,6 @@ def H_global(H_locals, elements):
 
 
 def main():
-    # Labolatoria
-
     # Odległości między węzłami na odpowiednich osiach
     d_x = global_data.W / (global_data.nW - 1)
     d_y = global_data.H / (global_data.nH - 1)
@@ -73,7 +71,7 @@ def main():
     #        print(fem_grid.ELEM[i].nodes_ID[j])
 
     # Drukuje wykres siatki
-    Plot.plot(global_data.nN, nodes)
+    # Plot.plot(global_data.nN, nodes)
 
     # Lab 3
     # elements[0].jacobian()
@@ -87,8 +85,8 @@ def main():
     for i in range(len(elements)):
         H.append(elements[i].H_matrix())
         C.append(elements[i].C_matrix())
-    hg = H_global(H, elements)
-    nc = H_global(C,elements)
+    # hg = H_global(H, elements)
+    # nc = H_global(C,elements)
     print('the end')
 
 main()
