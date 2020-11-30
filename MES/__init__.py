@@ -4,7 +4,8 @@ from MES import Read, GlobalData as g
 data = Read.read()
 
 # Laduje do klasy GlobalData
-global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"],data["pc"], data["ro"], data["c"], data["t0"])
+global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"], data["pc"], data["ro"], data["c"],
+                           data["t0"])
 
 from MES import Node as n, FEM_Grid as f, Element as e
 
@@ -19,7 +20,8 @@ elements = []
 # Tworzenie współrzędnych węzłów (dwie pierwsze zerowe współrzędne to ksi i eta)
 for i1 in range(global_data.nW):
     for j1 in range(global_data.nH):
-        nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0))
+        # TODO - BC wpisane na sztywno 0 - wymyślić schemat ustawiania dla każdej krawędzi
+        nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 0))
 
 # Tworzenie elementów
 # Pętla for ma dodatek '+ int((global_data.nW) / 2)' ponieważ przy tworzeniu siatki
@@ -42,15 +44,15 @@ for i in range(global_data.nE + int((global_data.nW) / 2)):
         elements.append(e.Element(global_data.pc, ID, nod))
         helpp += 1
         j += 1
-        a+=1
-        b+=1
-        c+=1
-        d+=1
+        a += 1
+        b += 1
+        c += 1
+        d += 1
     else:
-        a+=1
-        b+=1
-        c+=1
-        d+=1
+        a += 1
+        b += 1
+        c += 1
+        d += 1
         j += 1
         helpp = 0
 

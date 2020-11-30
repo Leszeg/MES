@@ -215,3 +215,32 @@ class Element:
             C_end += C_almost_end[i]
 
         return C_almost_end, C_end
+
+    # TODO - Działa tylko dla ręcznie zrobionych wartości - przerobić na schemat ogólny. Nie zapomnieć dodać punkt całkowania i zrobić obliczanie tego dla całej siatki
+    def boundary_condition(self):
+
+        N = np.zeros((4, 8), float)
+        ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
+        eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+
+        for i in range(8):
+            for j in range(4):
+                if j == 0:
+                    N[j][i] = 0.25 * (1 - ksi[i]) * (1 - eta[i])
+                elif j == 1:
+                    N[j][i] = 0.25 * (1 + ksi[i]) * (1 - eta[i])
+                elif j == 2:
+                    N[j][i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
+                elif j == 3:
+                    N[j][i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
+        k = 1
+        BC = []
+        tmp1 = np.outer(N[:, 0], np.transpose(N[:, 0]))
+        tmp2 = np.outer(N[:, 1], np.transpose(N[:, 1]))
+        BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
+
+        tmp1 = np.outer(N[:, 6], np.transpose(N[:, 6]))
+        tmp2 = np.outer(N[:, 7], np.transpose(N[:, 7]))
+        BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
+        BCH = BC[0] + BC[1]
+        print(BC)
