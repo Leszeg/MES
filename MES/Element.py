@@ -14,6 +14,7 @@ class Element:
         self.integration_points_count = int(c)
 
         # Współrzędne globalne elementu
+        self.nodes = nodes_c
         self.x = []
         self.y = []
         for i in range(4):
@@ -216,14 +217,31 @@ class Element:
 
         return C_almost_end, C_end
 
-    # TODO - Działa tylko dla ręcznie zrobionych wartości - przerobić na schemat ogólny. Nie zapomnieć dodać punkt całkowania i zrobić obliczanie tego dla całej siatki
     def boundary_condition(self):
+        if self.integration_points_count == 4:
+            choice = 8
+        elif self.integration_points_count == 9:
+            choice = 12
+        elif self.integration_points_count == 16:
+            choice = 16
 
-        N = np.zeros((4, 8), float)
-        ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
-        eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+        N = np.zeros((4, choice), float)
 
-        for i in range(8):
+        if choice == 8:
+            ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
+            eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+
+        if choice == 12:
+            ksi = [-sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5), -1, -1, -1]
+            eta = [-1, -1, -1, -sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5)]
+
+        if choice == 16:
+            ksi = [-0.861136, -0, 339981, 0, 339981, 0.861136, 1, 1, 1, 1, 0.861136, 0, 339981, -0, 339981, -0.861136,
+                   -1, -1, -1, -1]
+            eta = [-1, -1, -1, -1, -0.861136, -0, 339981, 0, 339981, 0.861136, 1, 1, 1, 1, 0.861136, 0, 339981, -0,
+                   339981, -0.861136]
+
+        for i in range(choice):
             for j in range(4):
                 if j == 0:
                     N[j][i] = 0.25 * (1 - ksi[i]) * (1 - eta[i])
@@ -233,14 +251,19 @@ class Element:
                     N[j][i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
                 elif j == 3:
                     N[j][i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
-        k = 1
+        # TODO - Zrobić algorytm żeby krawędzie każdego elementu po koleji i naliczało do maceirzy warunku brzegowego i potem scalić ją z odpowiednią macierzą jak na nagraniu
         BC = []
-        tmp1 = np.outer(N[:, 0], np.transpose(N[:, 0]))
-        tmp2 = np.outer(N[:, 1], np.transpose(N[:, 1]))
-        BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
+        for i in range(3):
+            if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
+                tmp1 = np.outer(N[:, i], np.transpose(N[:, i]))
+                tmp2 = np.outer(N[:, i + 1], np.transpose(N[:, i + 1]))
+                BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
 
-        tmp1 = np.outer(N[:, 6], np.transpose(N[:, 6]))
-        tmp2 = np.outer(N[:, 7], np.transpose(N[:, 7]))
-        BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
-        BCH = BC[0] + BC[1]
-        print(BC)
+            elif i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
+                tmp1 = np.outer(N[:, 3], np.transpose(N[:, 3]))
+                tmp2 = np.outer(N[:, 0], np.transpose(N[:, 0]))
+                BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
+        BCH = 0
+        for i in range(len(BC)):
+            BCH += BC[i]
+        print(BCH)

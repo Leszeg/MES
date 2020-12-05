@@ -24,8 +24,12 @@ class FEM_Grid:
         for j in range(global_data.nE):
             element = self.ELEM[j]
             for i in range(4):
-                plt.scatter(element.x[i], element.y[i], color='blue')
-                plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                if element.nodes[i].bc == 0:
+                    plt.scatter(element.x[i], element.y[i], color='blue')
+                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                if element.nodes[i].bc == 1:
+                    plt.scatter(element.x[i], element.y[i], color='red')
+                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
 
         major_ticks_x = arange(0, 0.1, 0.0333)
         major_ticks_y = arange(0, 0.21, 0.05)

@@ -17,11 +17,20 @@ d_y = global_data.H / (global_data.nH - 1)
 nodes = []
 elements = []
 
-# Tworzenie współrzędnych węzłów (dwie pierwsze zerowe współrzędne to ksi i eta)
+# Tworzenie współrzędnych węzłów
 for i1 in range(global_data.nW):
     for j1 in range(global_data.nH):
-        # TODO - BC wpisane na sztywno 0 - wymyślić schemat ustawiania dla każdej krawędzi
-        nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 0))
+        # Warunki odpowiadają za włąściwe ustawienie warunku brzegowego(flaga bc) na krawędziach siatki
+        if i1 == 0:
+            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
+        elif j1 == 0:
+            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
+        elif j1 == global_data.nH - 1:
+            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
+        elif i1 == global_data.nW - 1:
+            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
+        else:
+            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 0))
 
 # Tworzenie elementów
 # Pętla for ma dodatek '+ int((global_data.nW) / 2)' ponieważ przy tworzeniu siatki
