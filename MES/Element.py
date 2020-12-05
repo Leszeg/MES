@@ -260,8 +260,8 @@ class Element:
                 BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
 
             elif i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
-                tmp1 = np.outer(N[:, 3], np.transpose(N[:, 3]))
-                tmp2 = np.outer(N[:, 0], np.transpose(N[:, 0]))
+                tmp1 = np.outer(N[:, 6], np.transpose(N[:, 6]))
+                tmp2 = np.outer(N[:, 7], np.transpose(N[:, 7]))
                 BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
         BCH = 0
         for i in range(len(BC)):
