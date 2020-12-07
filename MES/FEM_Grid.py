@@ -41,12 +41,21 @@ class FEM_Grid:
     def matrix_global(self, H_locals):
         r = global_data.nW * global_data.nH
         Hg = zeros((r, r), float)
-        for k in range(len(self.ELEM)):
-            h1 = H_locals[k]
-            for i in range(4):
-                for j in range(4):
-                    Hg[self.ELEM[k].nodes_ID[i]][self.ELEM[k].nodes_ID[j]] += h1[i][j]
+        for i in range(len(self.ELEM)):
+            h1 = H_locals[i]
+            for j in range(4):
+
+                for k in range(4):
+                    Hg[self.ELEM[i].nodes_ID[j]][self.ELEM[i].nodes_ID[k]] += h1[j][k]
         return Hg
+
+    def P_global(self, P_locals):
+        r = global_data.nW * global_data.nH
+        Pg = zeros((r), float)
+        for i in range(len(self.ELEM)):
+            for j in range(4):
+                Pg[self.ELEM[i].nodes_ID[j]] += P_locals[i][j]
+        return Pg
 
     def print_element_data(self, e):
         element = self.ELEM[e]
@@ -217,11 +226,11 @@ class FEM_Grid:
 
         for j in range(global_data.nW * global_data.nH):
             for i in range(global_data.nW * global_data.nH):
-                sheet[xD+1].write(j, i, self.H_global[j][i])
+                sheet[xD + 1].write(j, i, self.H_global[j][i])
 
         sheet.append(book.add_sheet("Macierz C globalna"))
         for j in range(global_data.nW * global_data.nH):
             for i in range(global_data.nW * global_data.nH):
-                sheet[xD+2].write(j, i, self.C_global[j][i])
+                sheet[xD + 2].write(j, i, self.C_global[j][i])
 
         book.save("MES.xls")

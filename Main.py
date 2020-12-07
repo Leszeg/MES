@@ -1,7 +1,12 @@
-from MES import grid
+from MES import grid, global_data
 
 grid.print_grid_data()
-grid.print_global_matrix()
+# grid.print_global_matrix()
 grid.plot_grid()
 # grid.to_file()
-grid.ELEM[0].boundary_condition()
+tmp = 0
+tmp2 = []
+for i in range(global_data.nE):
+    tmp = grid.ELEM[i].boundary_condition()
+    tmp2.append(tmp[0])
+print(grid.P_global(tmp2))

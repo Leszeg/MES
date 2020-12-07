@@ -13,6 +13,19 @@ class Element:
         # Ilość punktów całkowania w elemencie
         self.integration_points_count = int(c)
 
+        # Wagi do całkowania
+        if self.integration_points_count == 4:
+            # Wagi
+            self.Ak = [1, 1]
+
+        elif int(self.integration_points_count) == 9:
+            # Wagi
+            self.Ak = [5 / 9, 8 / 9, 5 / 9]
+
+        elif int(self.integration_points_count) == 16:
+            # Wagi
+            self.Ak = [0.347855, 0.652145, 0.652145, 0.347855]
+
         # Współrzędne globalne elementu
         self.nodes = nodes_c
         self.x = []
@@ -73,27 +86,13 @@ class Element:
         # Macierz H dla elementu
         self.C_matrix_for_element = data[1]
 
-    def integral(self, H_matrix):
+    def integral(self, matrix):
         result = []
         k = 0
-
-        # Odpowiednie wagi w zależności od ilości punktów całkowania
-        if self.integration_points_count == 4:
-            # Wagi
-            Ak = [1, 1]
-
-        elif int(self.integration_points_count) == 9:
-            # Wagi
-            Ak = [5 / 9, 8 / 9, 5 / 9]
-
-        elif int(self.integration_points_count) == 16:
-            # Wagi
-            Ak = [0.347855, 0.652145, 0.652145, 0.347855]
-
         # Mnożymy przez wagi
-        for j in range(len(Ak)):
-            for i in range(len(Ak)):
-                result.append(H_matrix[k] * Ak[i] * Ak[j])
+        for j in range(len(self.Ak)):
+            for i in range(len(self.Ak)):
+                result.append(matrix[k] * self.Ak[i] * self.Ak[j])
                 k += 1
         return result
 
@@ -220,10 +219,13 @@ class Element:
     def boundary_condition(self):
         if self.integration_points_count == 4:
             choice = 8
+            choice2 = 2
         elif self.integration_points_count == 9:
             choice = 12
+            choice2 = 3
         elif self.integration_points_count == 16:
             choice = 16
+            choice2 = 4
 
         N = np.zeros((4, choice), float)
 
@@ -236,10 +238,10 @@ class Element:
             eta = [-1, -1, -1, -sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5)]
 
         if choice == 16:
-            ksi = [-0.861136, -0, 339981, 0, 339981, 0.861136, 1, 1, 1, 1, 0.861136, 0, 339981, -0, 339981, -0.861136,
+            ksi = [-0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981, -0.339981, -0.861136,
                    -1, -1, -1, -1]
-            eta = [-1, -1, -1, -1, -0.861136, -0, 339981, 0, 339981, 0.861136, 1, 1, 1, 1, 0.861136, 0, 339981, -0,
-                   339981, -0.861136]
+            eta = [-1, -1, -1, -1, -0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981,
+                   -0.339981, -0.861136]
 
         for i in range(choice):
             for j in range(4):
@@ -251,19 +253,41 @@ class Element:
                     N[j][i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
                 elif j == 3:
                     N[j][i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
-        # TODO - Zrobić algorytm żeby krawędzie każdego elementu po koleji i naliczało do maceirzy warunku brzegowego i potem scalić ją z odpowiednią macierzą jak na nagraniu
         BC = []
+        Pl = []
+        tmp = 0
+        tmp2 = 0
+        k = 0
         for i in range(3):
             if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
-                tmp1 = np.outer(N[:, i], np.transpose(N[:, i]))
-                tmp2 = np.outer(N[:, i + 1], np.transpose(N[:, i + 1]))
-                BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
 
-            elif i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
-                tmp1 = np.outer(N[:, 6], np.transpose(N[:, 6]))
-                tmp2 = np.outer(N[:, 7], np.transpose(N[:, 7]))
-                BC.append(global_data.k * (tmp1 + tmp2) * 0.0333 / 2)
-        BCH = 0
-        for i in range(len(BC)):
+                    k += 1
+                BC.append(global_data.k * tmp * ((0.01 / 3) / 2))
+                Pl.append(-global_data.k * 1200 * tmp2 * ((0.1 / 3) / 2))
+                tmp = 0
+                tmp2 = 0
+
+            else:
+                k += choice2
+
+            if i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+                    k += 1
+                BC.append(global_data.k * tmp * ((0.01 / 3) / 2))
+                Pl.append(-global_data.k * 1200 * tmp2 * ((0.1 / 3) / 2))
+                tmp = 0
+                tmp2 = 0
+
+        BCH = np.zeros((4, 4), float)
+        P = np.zeros((4), float)
+        for i in range(len(Pl)):
             BCH += BC[i]
-        print(BCH)
+            P += Pl[i]
+        # print(BCH)
+        # print(P)
+        return P, BCH
