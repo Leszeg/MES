@@ -1,68 +1,36 @@
-from MES import Read, GlobalData as g
+from MES.Data import print_grid_data, global_data
+from MES.FEM_Grid import FEM_Grid
+import numpy as np
 
-# Czytam dane potrzebne do wygenerowania siatki z pliku
-data = Read.read()
 
-# Laduje do klasy GlobalData
-global_data = g.GlobalData(data["W"], data["H"], data["nH"], data["nW"], data["k"], data["pc"], data["ro"], data["c"],
-                           data["t0"])
+def get_temps(g: FEM_Grid):
+    x = g.temperature_of_nodes.T
+    return x.T
 
-from MES import Node as n, FEM_Grid as f, Element as e
 
-# Odległości między węzłami na odpowiednich osiach
-d_x = global_data.W / (global_data.nW - 1)
-d_y = global_data.H / (global_data.nH - 1)
+def mult(X, Y):
+    result = np.zeros((16, 1))
+    # iterate through rows of X
+    for i in range(len(X)):
+        # iterate through columns of Y
+        for j in range(len(Y[0])):
+            # iterate through rows of Y
+            for k in range(len(Y)):
+                result[i][j] += X[i][k] * Y[k][j]
+    return result
 
-# Inicjowanie pustych tablic
-nodes = []
-elements = []
 
-# Tworzenie współrzędnych węzłów
-for i1 in range(global_data.nW):
-    for j1 in range(global_data.nH):
-        # Warunki odpowiadają za włąściwe ustawienie warunku brzegowego(flaga bc) na krawędziach siatki
-        if i1 == 0:
-            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
-        elif j1 == 0:
-            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
-        elif j1 == global_data.nH - 1:
-            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
-        elif i1 == global_data.nW - 1:
-            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 1))
-        else:
-            nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.t0, 0))
-
-# Tworzenie elementów
-# Pętla for ma dodatek '+ int((global_data.nW) / 2)' ponieważ przy tworzeniu siatki
-# elementy muszą być odpowiednio numerowane i będą dodatkowe 'puste przebiegi'
-# aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
-a = 0
-b = int(global_data.nH)
-c = int(global_data.nH + 1)
-d = 1
-helpp = 0
-j = 0
-for i in range(global_data.nE + int((global_data.nW) / 2)):
-    if helpp < global_data.nH - 1:
-        ID = []
-        ID.append(j)
-        ID.append(ID[0] + global_data.nH)
-        ID.append(ID[1] + 1)
-        ID.append(ID[0] + 1)
-        nod = [nodes[a], nodes[b], nodes[c], nodes[d]]
-        elements.append(e.Element(global_data.pc, ID, nod))
-        helpp += 1
-        j += 1
-        a += 1
-        b += 1
-        c += 1
-        d += 1
+temps = np.zeros((16, 1))
+for i in range(0, 500, 50):
+    if i == 0:
+        g = FEM_Grid(True, temps)
+        temps = get_temps(g)
     else:
-        a += 1
-        b += 1
-        c += 1
-        d += 1
-        j += 1
-        helpp = 0
-
-grid = f.FEM_Grid(elements)
+        g = FEM_Grid(False, temps)
+        temps = get_temps(g)
+    Hz = g.H_global + (g.C_global / global_data.sst)
+    x = -mult(g.C_global / global_data.sst, temps.T).T
+    Pz = -(g.P_global + x)
+    t = np.linalg.inv(Hz)
+    temps = mult(t, Pz.T).T
+    pass

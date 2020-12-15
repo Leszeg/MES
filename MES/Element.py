@@ -1,4 +1,4 @@
-from MES import global_data
+from MES.Data import global_data
 from math import sqrt
 import numpy as np
 from MES import IntegrationPoint as IP
@@ -85,6 +85,11 @@ class Element:
 
         # Macierz H dla elementu
         self.C_matrix_for_element = data[1]
+
+        data2 = self.boundary_condition()
+        self.P_matrix_for_element = data2[0]
+        self.BCH_matrix_for_element = data2[1]
+        self.H_matrix_for_element = self.H_matrix_for_element + self.BCH_matrix_for_element
 
     def integral(self, matrix):
         result = []
@@ -207,7 +212,7 @@ class Element:
         C = []
         for i in range(self.integration_points_count):
             tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i]
-            C.append(global_data.c * global_data.ro * tmp1)
+            C.append(global_data.Cw * global_data.ro * tmp1)
 
         C_almost_end = self.integral(C)
         C_end = 0
@@ -265,8 +270,8 @@ class Element:
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
 
                     k += 1
-                BC.append(global_data.k * tmp * ((0.01 / 3) / 2))
-                Pl.append(-global_data.k * 1200 * tmp2 * ((0.1 / 3) / 2))
+                BC.append(global_data.alfa * tmp * ((0.1 / 3) / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * ((0.1 / 3) / 2))
                 tmp = 0
                 tmp2 = 0
 
@@ -278,16 +283,15 @@ class Element:
                     tmp2 += N[:, k] * self.Ak[j]
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
                     k += 1
-                BC.append(global_data.k * tmp * ((0.01 / 3) / 2))
-                Pl.append(-global_data.k * 1200 * tmp2 * ((0.1 / 3) / 2))
+                BC.append(global_data.alfa * tmp * ((0.1 / 3) / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * ((0.1 / 3) / 2))
                 tmp = 0
                 tmp2 = 0
 
         BCH = np.zeros((4, 4), float)
-        P = np.zeros((4), float)
+        P = np.zeros(4, float)
         for i in range(len(Pl)):
             BCH += BC[i]
             P += Pl[i]
-        # print(BCH)
-        # print(P)
+
         return P, BCH

@@ -1,0 +1,13 @@
+100     initial_temperature
+500     simulation_time
+50      simulation_step_time
+1200    ambient_temperature
+300     alfa
+0.100   H
+0.100   B
+4       N_H
+4       N_B
+700     specific_heat
+25      conductivity
+7800    density
+4       integration_points
