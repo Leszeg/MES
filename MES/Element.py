@@ -263,6 +263,8 @@ class Element:
         tmp = 0
         tmp2 = 0
         k = 0
+        L_x = global_data.B / (global_data.N_B - 1)
+        L_y = global_data.H / (global_data.N_H - 1)
         for i in range(3):
             if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
                 for j in range(choice2):
@@ -270,8 +272,12 @@ class Element:
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
 
                     k += 1
-                BC.append(global_data.alfa * tmp * ((0.1 / 3) / 2))
-                Pl.append(-global_data.alfa * 1200 * tmp2 * ((0.1 / 3) / 2))
+                if i == 0:
+                    BC.append(global_data.alfa * tmp * ((L_x) / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * ((L_x) / 2))
+                else:
+                    BC.append(global_data.alfa * tmp * ((L_y) / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * ((L_y) / 2))
                 tmp = 0
                 tmp2 = 0
 
@@ -283,8 +289,8 @@ class Element:
                     tmp2 += N[:, k] * self.Ak[j]
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
                     k += 1
-                BC.append(global_data.alfa * tmp * ((0.1 / 3) / 2))
-                Pl.append(-global_data.alfa * 1200 * tmp2 * ((0.1 / 3) / 2))
+                BC.append(global_data.alfa * tmp * ((L_y) / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * ((L_y) / 2))
                 tmp = 0
                 tmp2 = 0
 

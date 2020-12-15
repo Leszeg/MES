@@ -13,13 +13,13 @@ class FEM_Grid:
         # Odległości między węzłami na odpowiednich osiach
         d_x = global_data.B / (global_data.N_B - 1)
         d_y = global_data.H / (global_data.N_H - 1)
-
+        nE = global_data.nE
         # Inicjowanie pustych tablic
         self.nodes = []
         self.elements = []
         if is_first:
             for i in range(global_data.nN):
-                self.temperature_of_nodes = np.full((1, 16), global_data.it)
+                self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
         else:
             self.temperature_of_nodes = temps
         k = 0
@@ -45,7 +45,7 @@ class FEM_Grid:
         # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         column_end = 0
-        for i in range(global_data.nE + int(global_data.N_B / 2)):
+        for i in range(global_data.nE + global_data.N_B - 1):
             if column_end < global_data.N_H - 1:
                 ID = []
                 ID.append(tmp[4])
@@ -90,16 +90,14 @@ class FEM_Grid:
             for i in range(4):
                 if element.nodes[i].bc == 0:
                     plt.scatter(element.x[i], element.y[i], color='blue')
-                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                    if (len(self.elements) < 10):
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
                 if element.nodes[i].bc == 1:
                     plt.scatter(element.x[i], element.y[i], color='red')
-                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                    if (len(self.elements) < 10):
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
 
-        major_ticks_x = arange(0, 0.1, 0.0333)
-        major_ticks_y = arange(0, 0.21, 0.05)
-        ax.set_xticks(major_ticks_x)
-        ax.set_yticks(major_ticks_y)
-        ax.g(which='both')
+        ax.grid(which='both')
         plt.show()
 
     def matrix_global(self, H_locals):
@@ -108,7 +106,6 @@ class FEM_Grid:
         for i in range(len(self.elements)):
             h1 = H_locals[i]
             for j in range(4):
-
                 for k in range(4):
                     Hg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += h1[j][k]
         return Hg

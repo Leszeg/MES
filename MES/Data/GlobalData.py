@@ -9,8 +9,8 @@ class GlobalData:
         self.alfa = float(alfa)  # Współczynnik przekazywania ciepłą przez konwekcję
         self.H = float(H)  # Wysokość siatki
         self.B = float(B)  # Szerokość siatki
-        self.N_H = int(N_H)  # Ilość elementów na wysokości
-        self.N_B = int(N_B)  # Ilość elementów na szerokości
+        self.N_H = int(N_H)  # Ilość węzłów na wysokości
+        self.N_B = int(N_B)  # Ilość węzłów na szerokości
         self.nE = int((self.N_H - 1) * (self.N_B - 1))  # Ilość elementów w siatce
         self.nN = int(self.N_H * self.N_B)  # Ilość węzłów w siatce
         self.Cw = float(specific_heat)  # Ciepło właściwe
