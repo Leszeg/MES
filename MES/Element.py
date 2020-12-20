@@ -1,7 +1,9 @@
-from typing import List
-from MES.Data import global_data
 from math import sqrt
+from typing import List
+
 import numpy as np
+
+from MES.Data import global_data
 from MES.Node import Node
 
 
@@ -61,7 +63,7 @@ class Element:
         H_matrix_for_ip : list of ndarray
             List of H_matrix for each integration point in element
 
-        H_matrix_for_element : ndarray
+        H_matrix_for_element : list of ndarray
             H_matrix for element
 
         C_matrix_for_ip : ndarray
@@ -143,7 +145,7 @@ class Element:
 
         Parameters
         ----------
-        matrix : ndarray
+        matrix : list of ndarray
             Square matrix H or C
 
         Returns
@@ -351,10 +353,10 @@ class Element:
                     k += 1
                 if i == 0 or i == 2:
                     BC.append(global_data.alfa * tmp * (L_x / 2))
-                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_x / 2))
+                    Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_x / 2))
                 else:
                     BC.append(global_data.alfa * tmp * (L_y / 2))
-                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                    Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
                 tmp = 0
                 tmp2 = 0
 
@@ -367,7 +369,7 @@ class Element:
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
                     k += 1
                 BC.append(global_data.alfa * tmp * (L_y / 2))
-                Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
                 tmp = 0
                 tmp2 = 0
 

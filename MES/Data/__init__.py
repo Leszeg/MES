@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from MES.Data.GlobalData import GlobalData
 
 # Czytam dane potrzebne do wygenerowania siatki z pliku

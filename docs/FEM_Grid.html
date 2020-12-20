@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>MES.FEM_Grid API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>MES.FEM_Grid</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import matplotlib.pyplot as plt
+import numpy as np
+import xlwt
+from numpy import zeros
+
+from MES import Node as n, Element as e
+from MES.Data import global_data
+
+
+# Przechowuje listę elementów i listę węzłów potrzebne do stworzenia siatki
+class FEM_Grid:
+    &#34;&#34;&#34;
+    Class represents FEM grid
+
+    Attributes
+    ----------
+    nodes : list
+        List of nodes in gird
+
+    elements : list
+        List of elements in grid
+
+    temperature_of_nodes : list
+        List of nodes temperatures
+
+    H_global : ndarray
+        H_global matrix
+
+    C_global : ndarray
+        C_global matrix
+
+    P_global : ndarray
+        P_global matrix
+
+    &#34;&#34;&#34;
+
+    def __init__(self, is_first: bool, temps):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the FEM_grid object
+
+        Parameters
+        ----------
+        is_first : bool
+            Check if it is first create girid
+        temps : list
+            List of temperatures in nodes
+        &#34;&#34;&#34;
+
+        d_x = global_data.B / (global_data.N_B - 1)
+        d_y = global_data.H / (global_data.N_H - 1)
+
+        self.nodes = []
+        self.elements = []
+        self.get_temps(is_first, temps)
+        k = 0
+
+        # Tworzenie współrzędnych węzłów
+        for i1 in range(global_data.N_B):
+            for j1 in range(global_data.N_H):
+                # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
+                if i1 == 0:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif j1 == 0:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif j1 == global_data.N_H - 1:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif i1 == global_data.N_B - 1:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                else:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
+                k += 1
+
+        # Tworzenie elementów
+        # Pętla for ma dodatek &#39;+ global_data.N_B - 1&#39; ponieważ przy tworzeniu siatki
+        # elementy muszą być odpowiednio numerowane i będą dodatkowe &#39;puste przebiegi&#39;
+        # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
+        tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
+        column_end = 0
+
+        for i in range(global_data.nE + global_data.N_B - 1):
+            if column_end &lt; global_data.N_H - 1:
+                ID = []
+                ID.append(tmp[4])
+                ID.append(ID[0] + global_data.N_H)
+                ID.append(ID[1] + 1)
+                ID.append(ID[0] + 1)
+                nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                self.elements.append(e.Element(ID, nod))
+                column_end += 1
+                tmp[0] += 1
+                tmp[1] += 1
+                tmp[2] += 1
+                tmp[3] += 1
+                tmp[4] += 1
+            else:
+                tmp[0] += 1
+                tmp[1] += 1
+                tmp[2] += 1
+                tmp[3] += 1
+                tmp[4] += 1
+                column_end = 0
+
+        self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
+
+    def plot_grid(self):
+        &#34;&#34;&#34;
+        Function plot grid elements and nodes.
+        Blue - simple node
+        Red - boundary condition
+        &#34;&#34;&#34;
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        for element in self.elements:
+            for i in range(4):
+                if element.nodes[i].bc == 0:
+                    plt.scatter(element.x[i], element.y[i], color=&#39;blue&#39;)
+                    if len(self.elements) &lt; 10:
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                if element.nodes[i].bc == 1:
+                    plt.scatter(element.x[i], element.y[i], color=&#39;red&#39;)
+                    if len(self.elements) &lt; 10:
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+
+        ax.grid(which=&#39;both&#39;)
+        plt.show()
+
+    def matrix_aggregation(self):
+        &#34;&#34;&#34;
+        Function aggregate local matrices to global
+        Parameters
+        ----------
+        H_locals : ndarray
+        C_locals : ndarray
+        P_locals : ndarray
+
+        Returns
+        -------
+        tuple
+            Returns global matrices
+        &#34;&#34;&#34;
+        r = global_data.N_B * global_data.N_H
+        Pg = zeros(r, float)
+        Hg = zeros((r, r), float)
+        Cg = zeros((r, r), float)
+        for i in range(len(self.elements)):
+            h1 = self.elements[i].H_matrix_for_element
+            c1 = self.elements[i].C_matrix_for_element
+            for j in range(4):
+                p1 = self.elements[i].P_matrix_for_element
+                Pg[self.elements[i].nodes_ID[j]] += p1[j]
+                for k in range(4):
+                    Hg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += h1[j][k]
+                    Cg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += c1[j][k]
+        return Hg, Cg, Pg
+
+    def to_file(self):
+        book = xlwt.Workbook(encoding=&#34;utf-8&#34;)
+        sheet = []
+        counter = 0
+        for omg in range(global_data.nE):
+            sheet.append(book.add_sheet(f&#34;ELement_{omg}&#34;))
+            element = self.elements[omg]
+
+            sheet[omg].write(0, 0, &#34;ID węzłów&#34;)
+            for i in range(4):
+                sheet[omg].write(1, i, element.nodes_ID[i])
+
+            sheet[omg].write(3, 0, &#34;Współrzędne X&#34;)
+            for i in range(4):
+                sheet[omg].write(4, i, element.x[i])
+
+            sheet[omg].write(6, 0, &#34;Współrzędne Y&#34;)
+            for i in range(4):
+                sheet[omg].write(7, i, element.y[i])
+
+            sheet[omg].write(9, 0, &#34;Ilość punktów całkowania&#34;)
+            sheet[omg].write(10, 0, global_data.ip)
+
+            sheet[omg].write(12, 0, &#34;Współrzędne ksi punktów całkowania&#34;)
+            for i in range(global_data.ip):
+                sheet[omg].write(13, i, element.ksi[i])
+
+            sheet[omg].write(15, 0, &#34;Współrzędne eta punktów całkowania&#34;)
+            for i in range(global_data.ip):
+                sheet[omg].write(16, i, element.eta[i])
+
+            sheet[omg].write(18, 0, &#34;Macierz Jacobiego&#34;)
+            for j in range(global_data.ip):
+                counter = 19 + j
+                for i in range(4):
+                    sheet[omg].write(counter, i, element.jacob_matrix[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;dN_dKsi&#34;)
+            counter += 2
+            for j in range(4):
+                counter += 1
+                for i in range(global_data.ip):
+                    sheet[omg].write(counter, i, element.dN_dKsi[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;dN_dEta&#34;)
+            counter += 2
+            for j in range(4):
+                counter += 1
+                for i in range(global_data.ip):
+                    sheet[omg].write(counter, i, element.dN_dEta[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;Wyznacznik macierzy Jacobiego&#34;)
+            counter += 3
+            for i in range(global_data.ip):
+                sheet[omg].write(counter, i, element.determinant[i])
+
+            sheet[omg].write(counter + 2, 0, &#34;Odwrócona macierz Jacobiego&#34;)
+            counter += 2
+            for j in range(global_data.ip):
+                counter += 1
+                for i in range(4):
+                    sheet[omg].write(counter, i, element.inv_jac[j][i])
+            tmp2 = counter
+            for i in range(global_data.ip):
+                sheet[omg].write(counter + 2, 0, f&#34;Macierz H dla {i} punktu całkowania&#34;)
+                counter += 2
+                H = element.H_matrix_for_ip[i]
+                for j in range(4):
+                    counter += 1
+                    for k in range(4):
+                        sheet[omg].write(counter, k, H[j][k])
+
+            for i in range(global_data.ip):
+                sheet[omg].write(tmp2 + 2, 6, f&#34;Macierz C dla {i} punktu całkowania&#34;)
+                tmp2 += 2
+                C = element.C_matrix_for_ip[i]
+                for j in range(4):
+                    tmp2 += 1
+                    for k in range(4):
+                        sheet[omg].write(tmp2, 6 + k, C[j][k])
+
+            sheet[omg].write(counter + 2, 0, &#34;Macierz H dla elementu&#34;)
+            counter += 2
+            for i in range(4):
+                counter += 1
+                for j in range(4):
+                    sheet[omg].write(counter, j, element.H_matrix_for_element[i][j])
+
+            sheet[omg].write(tmp2 + 2, 6, &#34;Macierz C dla elementu&#34;)
+            tmp2 += 2
+            for i in range(4):
+                tmp2 += 1
+                for j in range(4):
+                    sheet[omg].write(tmp2, j + 6, element.C_matrix_for_element[i][j])
+            xD = omg
+
+        book.save(&#34;MES.xls&#34;)
+
+    def get_temps(self, is_first, temps):
+        if is_first:
+            self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+        else:
+            self.temperature_of_nodes = temps</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="MES.FEM_Grid.FEM_Grid"><code class="flex name class">
+<span>class <span class="ident">FEM_Grid</span></span>
+<span>(</span><span>is_first: bool, temps)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class represents FEM grid</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>nodes</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of nodes in gird</dd>
+<dt><strong><code>elements</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of elements in grid</dd>
+<dt><strong><code>temperature_of_nodes</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of nodes temperatures</dd>
+<dt><strong><code>H_global</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>H_global matrix</dd>
+<dt><strong><code>C_global</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>C_global matrix</dd>
+<dt><strong><code>P_global</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>P_global matrix</dd>
+</dl>
+<p>Constructs all the necessary attributes for the FEM_grid object</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>is_first</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Check if it is first create girid</dd>
+<dt><strong><code>temps</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of temperatures in nodes</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FEM_Grid:
+    &#34;&#34;&#34;
+    Class represents FEM grid
+
+    Attributes
+    ----------
+    nodes : list
+        List of nodes in gird
+
+    elements : list
+        List of elements in grid
+
+    temperature_of_nodes : list
+        List of nodes temperatures
+
+    H_global : ndarray
+        H_global matrix
+
+    C_global : ndarray
+        C_global matrix
+
+    P_global : ndarray
+        P_global matrix
+
+    &#34;&#34;&#34;
+
+    def __init__(self, is_first: bool, temps):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the FEM_grid object
+
+        Parameters
+        ----------
+        is_first : bool
+            Check if it is first create girid
+        temps : list
+            List of temperatures in nodes
+        &#34;&#34;&#34;
+
+        d_x = global_data.B / (global_data.N_B - 1)
+        d_y = global_data.H / (global_data.N_H - 1)
+
+        self.nodes = []
+        self.elements = []
+        self.get_temps(is_first, temps)
+        k = 0
+
+        # Tworzenie współrzędnych węzłów
+        for i1 in range(global_data.N_B):
+            for j1 in range(global_data.N_H):
+                # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
+                if i1 == 0:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif j1 == 0:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif j1 == global_data.N_H - 1:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                elif i1 == global_data.N_B - 1:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                else:
+                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
+                k += 1
+
+        # Tworzenie elementów
+        # Pętla for ma dodatek &#39;+ global_data.N_B - 1&#39; ponieważ przy tworzeniu siatki
+        # elementy muszą być odpowiednio numerowane i będą dodatkowe &#39;puste przebiegi&#39;
+        # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
+        tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
+        column_end = 0
+
+        for i in range(global_data.nE + global_data.N_B - 1):
+            if column_end &lt; global_data.N_H - 1:
+                ID = []
+                ID.append(tmp[4])
+                ID.append(ID[0] + global_data.N_H)
+                ID.append(ID[1] + 1)
+                ID.append(ID[0] + 1)
+                nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                self.elements.append(e.Element(ID, nod))
+                column_end += 1
+                tmp[0] += 1
+                tmp[1] += 1
+                tmp[2] += 1
+                tmp[3] += 1
+                tmp[4] += 1
+            else:
+                tmp[0] += 1
+                tmp[1] += 1
+                tmp[2] += 1
+                tmp[3] += 1
+                tmp[4] += 1
+                column_end = 0
+
+        self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
+
+    def plot_grid(self):
+        &#34;&#34;&#34;
+        Function plot grid elements and nodes.
+        Blue - simple node
+        Red - boundary condition
+        &#34;&#34;&#34;
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        for element in self.elements:
+            for i in range(4):
+                if element.nodes[i].bc == 0:
+                    plt.scatter(element.x[i], element.y[i], color=&#39;blue&#39;)
+                    if len(self.elements) &lt; 10:
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+                if element.nodes[i].bc == 1:
+                    plt.scatter(element.x[i], element.y[i], color=&#39;red&#39;)
+                    if len(self.elements) &lt; 10:
+                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+
+        ax.grid(which=&#39;both&#39;)
+        plt.show()
+
+    def matrix_aggregation(self):
+        &#34;&#34;&#34;
+        Function aggregate local matrices to global
+        Parameters
+        ----------
+        H_locals : ndarray
+        C_locals : ndarray
+        P_locals : ndarray
+
+        Returns
+        -------
+        tuple
+            Returns global matrices
+        &#34;&#34;&#34;
+        r = global_data.N_B * global_data.N_H
+        Pg = zeros(r, float)
+        Hg = zeros((r, r), float)
+        Cg = zeros((r, r), float)
+        for i in range(len(self.elements)):
+            h1 = self.elements[i].H_matrix_for_element
+            c1 = self.elements[i].C_matrix_for_element
+            for j in range(4):
+                p1 = self.elements[i].P_matrix_for_element
+                Pg[self.elements[i].nodes_ID[j]] += p1[j]
+                for k in range(4):
+                    Hg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += h1[j][k]
+                    Cg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += c1[j][k]
+        return Hg, Cg, Pg
+
+    def to_file(self):
+        book = xlwt.Workbook(encoding=&#34;utf-8&#34;)
+        sheet = []
+        counter = 0
+        for omg in range(global_data.nE):
+            sheet.append(book.add_sheet(f&#34;ELement_{omg}&#34;))
+            element = self.elements[omg]
+
+            sheet[omg].write(0, 0, &#34;ID węzłów&#34;)
+            for i in range(4):
+                sheet[omg].write(1, i, element.nodes_ID[i])
+
+            sheet[omg].write(3, 0, &#34;Współrzędne X&#34;)
+            for i in range(4):
+                sheet[omg].write(4, i, element.x[i])
+
+            sheet[omg].write(6, 0, &#34;Współrzędne Y&#34;)
+            for i in range(4):
+                sheet[omg].write(7, i, element.y[i])
+
+            sheet[omg].write(9, 0, &#34;Ilość punktów całkowania&#34;)
+            sheet[omg].write(10, 0, global_data.ip)
+
+            sheet[omg].write(12, 0, &#34;Współrzędne ksi punktów całkowania&#34;)
+            for i in range(global_data.ip):
+                sheet[omg].write(13, i, element.ksi[i])
+
+            sheet[omg].write(15, 0, &#34;Współrzędne eta punktów całkowania&#34;)
+            for i in range(global_data.ip):
+                sheet[omg].write(16, i, element.eta[i])
+
+            sheet[omg].write(18, 0, &#34;Macierz Jacobiego&#34;)
+            for j in range(global_data.ip):
+                counter = 19 + j
+                for i in range(4):
+                    sheet[omg].write(counter, i, element.jacob_matrix[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;dN_dKsi&#34;)
+            counter += 2
+            for j in range(4):
+                counter += 1
+                for i in range(global_data.ip):
+                    sheet[omg].write(counter, i, element.dN_dKsi[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;dN_dEta&#34;)
+            counter += 2
+            for j in range(4):
+                counter += 1
+                for i in range(global_data.ip):
+                    sheet[omg].write(counter, i, element.dN_dEta[j][i])
+
+            sheet[omg].write(counter + 2, 0, &#34;Wyznacznik macierzy Jacobiego&#34;)
+            counter += 3
+            for i in range(global_data.ip):
+                sheet[omg].write(counter, i, element.determinant[i])
+
+            sheet[omg].write(counter + 2, 0, &#34;Odwrócona macierz Jacobiego&#34;)
+            counter += 2
+            for j in range(global_data.ip):
+                counter += 1
+                for i in range(4):
+                    sheet[omg].write(counter, i, element.inv_jac[j][i])
+            tmp2 = counter
+            for i in range(global_data.ip):
+                sheet[omg].write(counter + 2, 0, f&#34;Macierz H dla {i} punktu całkowania&#34;)
+                counter += 2
+                H = element.H_matrix_for_ip[i]
+                for j in range(4):
+                    counter += 1
+                    for k in range(4):
+                        sheet[omg].write(counter, k, H[j][k])
+
+            for i in range(global_data.ip):
+                sheet[omg].write(tmp2 + 2, 6, f&#34;Macierz C dla {i} punktu całkowania&#34;)
+                tmp2 += 2
+                C = element.C_matrix_for_ip[i]
+                for j in range(4):
+                    tmp2 += 1
+                    for k in range(4):
+                        sheet[omg].write(tmp2, 6 + k, C[j][k])
+
+            sheet[omg].write(counter + 2, 0, &#34;Macierz H dla elementu&#34;)
+            counter += 2
+            for i in range(4):
+                counter += 1
+                for j in range(4):
+                    sheet[omg].write(counter, j, element.H_matrix_for_element[i][j])
+
+            sheet[omg].write(tmp2 + 2, 6, &#34;Macierz C dla elementu&#34;)
+            tmp2 += 2
+            for i in range(4):
+                tmp2 += 1
+                for j in range(4):
+                    sheet[omg].write(tmp2, j + 6, element.C_matrix_for_element[i][j])
+            xD = omg
+
+        book.save(&#34;MES.xls&#34;)
+
+    def get_temps(self, is_first, temps):
+        if is_first:
+            self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+        else:
+            self.temperature_of_nodes = temps</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="MES.FEM_Grid.FEM_Grid.get_temps"><code class="name flex">
+<span>def <span class="ident">get_temps</span></span>(<span>self, is_first, temps)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_temps(self, is_first, temps):
+    if is_first:
+        self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+    else:
+        self.temperature_of_nodes = temps</code></pre>
+</details>
+</dd>
+<dt id="MES.FEM_Grid.FEM_Grid.matrix_aggregation"><code class="name flex">
+<span>def <span class="ident">matrix_aggregation</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function aggregate local matrices to global
+Parameters</p>
+<hr>
+<dl>
+<dt><strong><code>H_locals</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>C_locals</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>P_locals</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Returns global matrices</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def matrix_aggregation(self):
+    &#34;&#34;&#34;
+    Function aggregate local matrices to global
+    Parameters
+    ----------
+    H_locals : ndarray
+    C_locals : ndarray
+    P_locals : ndarray
+
+    Returns
+    -------
+    tuple
+        Returns global matrices
+    &#34;&#34;&#34;
+    r = global_data.N_B * global_data.N_H
+    Pg = zeros(r, float)
+    Hg = zeros((r, r), float)
+    Cg = zeros((r, r), float)
+    for i in range(len(self.elements)):
+        h1 = self.elements[i].H_matrix_for_element
+        c1 = self.elements[i].C_matrix_for_element
+        for j in range(4):
+            p1 = self.elements[i].P_matrix_for_element
+            Pg[self.elements[i].nodes_ID[j]] += p1[j]
+            for k in range(4):
+                Hg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += h1[j][k]
+                Cg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += c1[j][k]
+    return Hg, Cg, Pg</code></pre>
+</details>
+</dd>
+<dt id="MES.FEM_Grid.FEM_Grid.plot_grid"><code class="name flex">
+<span>def <span class="ident">plot_grid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function plot grid elements and nodes.
+Blue - simple node
+Red - boundary condition</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_grid(self):
+    &#34;&#34;&#34;
+    Function plot grid elements and nodes.
+    Blue - simple node
+    Red - boundary condition
+    &#34;&#34;&#34;
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    for element in self.elements:
+        for i in range(4):
+            if element.nodes[i].bc == 0:
+                plt.scatter(element.x[i], element.y[i], color=&#39;blue&#39;)
+                if len(self.elements) &lt; 10:
+                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+            if element.nodes[i].bc == 1:
+                plt.scatter(element.x[i], element.y[i], color=&#39;red&#39;)
+                if len(self.elements) &lt; 10:
+                    plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
+
+    ax.grid(which=&#39;both&#39;)
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="MES.FEM_Grid.FEM_Grid.to_file"><code class="name flex">
+<span>def <span class="ident">to_file</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_file(self):
+    book = xlwt.Workbook(encoding=&#34;utf-8&#34;)
+    sheet = []
+    counter = 0
+    for omg in range(global_data.nE):
+        sheet.append(book.add_sheet(f&#34;ELement_{omg}&#34;))
+        element = self.elements[omg]
+
+        sheet[omg].write(0, 0, &#34;ID węzłów&#34;)
+        for i in range(4):
+            sheet[omg].write(1, i, element.nodes_ID[i])
+
+        sheet[omg].write(3, 0, &#34;Współrzędne X&#34;)
+        for i in range(4):
+            sheet[omg].write(4, i, element.x[i])
+
+        sheet[omg].write(6, 0, &#34;Współrzędne Y&#34;)
+        for i in range(4):
+            sheet[omg].write(7, i, element.y[i])
+
+        sheet[omg].write(9, 0, &#34;Ilość punktów całkowania&#34;)
+        sheet[omg].write(10, 0, global_data.ip)
+
+        sheet[omg].write(12, 0, &#34;Współrzędne ksi punktów całkowania&#34;)
+        for i in range(global_data.ip):
+            sheet[omg].write(13, i, element.ksi[i])
+
+        sheet[omg].write(15, 0, &#34;Współrzędne eta punktów całkowania&#34;)
+        for i in range(global_data.ip):
+            sheet[omg].write(16, i, element.eta[i])
+
+        sheet[omg].write(18, 0, &#34;Macierz Jacobiego&#34;)
+        for j in range(global_data.ip):
+            counter = 19 + j
+            for i in range(4):
+                sheet[omg].write(counter, i, element.jacob_matrix[j][i])
+
+        sheet[omg].write(counter + 2, 0, &#34;dN_dKsi&#34;)
+        counter += 2
+        for j in range(4):
+            counter += 1
+            for i in range(global_data.ip):
+                sheet[omg].write(counter, i, element.dN_dKsi[j][i])
+
+        sheet[omg].write(counter + 2, 0, &#34;dN_dEta&#34;)
+        counter += 2
+        for j in range(4):
+            counter += 1
+            for i in range(global_data.ip):
+                sheet[omg].write(counter, i, element.dN_dEta[j][i])
+
+        sheet[omg].write(counter + 2, 0, &#34;Wyznacznik macierzy Jacobiego&#34;)
+        counter += 3
+        for i in range(global_data.ip):
+            sheet[omg].write(counter, i, element.determinant[i])
+
+        sheet[omg].write(counter + 2, 0, &#34;Odwrócona macierz Jacobiego&#34;)
+        counter += 2
+        for j in range(global_data.ip):
+            counter += 1
+            for i in range(4):
+                sheet[omg].write(counter, i, element.inv_jac[j][i])
+        tmp2 = counter
+        for i in range(global_data.ip):
+            sheet[omg].write(counter + 2, 0, f&#34;Macierz H dla {i} punktu całkowania&#34;)
+            counter += 2
+            H = element.H_matrix_for_ip[i]
+            for j in range(4):
+                counter += 1
+                for k in range(4):
+                    sheet[omg].write(counter, k, H[j][k])
+
+        for i in range(global_data.ip):
+            sheet[omg].write(tmp2 + 2, 6, f&#34;Macierz C dla {i} punktu całkowania&#34;)
+            tmp2 += 2
+            C = element.C_matrix_for_ip[i]
+            for j in range(4):
+                tmp2 += 1
+                for k in range(4):
+                    sheet[omg].write(tmp2, 6 + k, C[j][k])
+
+        sheet[omg].write(counter + 2, 0, &#34;Macierz H dla elementu&#34;)
+        counter += 2
+        for i in range(4):
+            counter += 1
+            for j in range(4):
+                sheet[omg].write(counter, j, element.H_matrix_for_element[i][j])
+
+        sheet[omg].write(tmp2 + 2, 6, &#34;Macierz C dla elementu&#34;)
+        tmp2 += 2
+        for i in range(4):
+            tmp2 += 1
+            for j in range(4):
+                sheet[omg].write(tmp2, j + 6, element.C_matrix_for_element[i][j])
+        xD = omg
+
+    book.save(&#34;MES.xls&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="MES" href="index.html">MES</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="MES.FEM_Grid.FEM_Grid" href="#MES.FEM_Grid.FEM_Grid">FEM_Grid</a></code></h4>
+<ul class="">
+<li><code><a title="MES.FEM_Grid.FEM_Grid.get_temps" href="#MES.FEM_Grid.FEM_Grid.get_temps">get_temps</a></code></li>
+<li><code><a title="MES.FEM_Grid.FEM_Grid.matrix_aggregation" href="#MES.FEM_Grid.FEM_Grid.matrix_aggregation">matrix_aggregation</a></code></li>
+<li><code><a title="MES.FEM_Grid.FEM_Grid.plot_grid" href="#MES.FEM_Grid.FEM_Grid.plot_grid">plot_grid</a></code></li>
+<li><code><a title="MES.FEM_Grid.FEM_Grid.to_file" href="#MES.FEM_Grid.FEM_Grid.to_file">to_file</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

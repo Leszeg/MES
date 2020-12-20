@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>MES.Element API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>MES.Element</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from math import sqrt
+from typing import List
+
+import numpy as np
+
+from MES.Data import global_data
+from MES.Node import Node
+
+
+class Element:
+    &#34;&#34;&#34;
+    The class represents an element in the FEM mesh
+    Creating an element involves the calculation of all its local parameters required for further global aggregations
+
+    Attributes
+    ----------
+        nodes_ID : List[int]
+            Node ID list in the element (in set order)
+
+        nodes : list[Node]
+            List of node coordinates in element (in set order)
+
+        Ak : List[float]
+            List of parameters needed for integration
+
+        x : List[float]
+            List of x coordinates for each node in element (in set order)
+
+        y : List[float]
+            List of y coordinates for each node in element (in set order)
+
+        ksi : List[float]
+            List of ksi coordinates for each integration_points in element (in row order)
+
+        eta : List[float]
+            List of eta coordinates for each integration_points in element (in row order)
+
+        jacob_matrix : ndarray
+            Matrix where each row is Jacobi matrix.
+            To visualize inv_jac, we take elements from the row representing the Jacobi matrix
+            Then insert them one by one with rows from the top
+
+        dN_dEta : ndarray
+            Matrix of dN / dEta derivatives.
+            Row - Shape function
+            Column - integration point
+            In one line we have the values of one shape function at all integration points
+
+        dN_dKsi : ndarray
+            Matrix of dN / dKsi derivatives.
+            Row - Shape function
+            Column - integration point
+            In one line we have the values of one shape function at all integration points
+
+        determinant : List[float]
+            List of Jacobi matrices determinant
+
+        inv_jac : List[float]
+            Matrix where each row is inverted Jacobi matrix.
+            To visualize inv_jac, we take elements from the row representing the inverted matrix
+            Then insert them one by one with rows from the top
+
+        H_matrix_for_ip : list of ndarray
+            List of H_matrix for each integration point in element
+
+        H_matrix_for_element : ndarray
+            H_matrix for element
+
+        C_matrix_for_ip : ndarray
+            C_matrix for each integration point in element
+
+        C_matrix_for_element : ndarray
+            C_matrix for element
+
+        P_matrix_for_element : ndarray
+            P_matrix for element
+
+        BCH_matrix_for_element : ndarray
+            BCH_matrix for element
+    &#34;&#34;&#34;
+
+    def __init__(self, Id: List[int], nodes_c: List[Node]):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Element object
+
+        Parameters
+        ----------
+        Id : list of int
+            Node ID list in the element (in set order)
+
+        nodes_c : list of Node
+            List of node coordinates in element (in set order)
+        &#34;&#34;&#34;
+        self.nodes_ID = Id
+
+        self.nodes = nodes_c
+        self.x = []
+        self.y = []
+        for i in self.nodes:
+            self.x.append(i.x)
+            self.y.append(i.y)
+
+        if global_data.ip == 4:
+            self.Ak = [1, 1]
+
+        elif int(global_data.ip) == 9:
+            self.Ak = [5 / 9, 8 / 9, 5 / 9]
+
+        elif int(global_data.ip) == 16:
+            self.Ak = [0.347855, 0.652145, 0.652145, 0.347855]
+
+        # Współrzędne punktów całkowania w zależności od schematu
+        if global_data.ip == 4:
+            node_v = [-1 / sqrt(3), 1 / sqrt(3)]
+
+        elif global_data.ip == 9:
+            node_v = [-sqrt(3 / 5), 0, sqrt(3 / 5)]
+
+        elif global_data.ip == 16:
+            node_v = [-0.861136, -0.339981, 0.339981, 0.861136]
+        else:
+            raise ValueError(&#34;Wrong value of global_data.ip&#34;)
+
+        # Tablica współrzędnych punktów całkowania - tworzona wierszami dla elementu
+        k = 0
+        t = 0
+        self.ksi = []
+        self.eta = []
+        for i in range(global_data.ip):
+            self.ksi.append(node_v[k])
+            self.eta.append(node_v[t])
+            k += 1
+            if k % len(node_v) == 0:
+                t += 1
+                k = 0
+        self.jacob_matrix, self.dN_dEta, self.dN_dKsi, self.determinant, self.inv_jac = self.jacobian()
+        self.H_matrix_for_ip, self.H_matrix_for_element = self.H_matrix()
+        self.C_matrix_for_ip, self.C_matrix_for_element = self.C_matrix()
+        self.P_matrix_for_element, self.BCH_matrix_for_element = self.boundary_condition()
+        self.H_matrix_for_element += self.BCH_matrix_for_element
+
+    def integral(self, matrix):
+        &#34;&#34;&#34;
+        Function multiply H or C matrices (must be square) with parameters is set order
+
+        Parameters
+        ----------
+        matrix : ndarray
+            Square matrix H or C
+
+        Returns
+        -------
+        list
+            Returns the list of matrix after multiplication by parameters
+        &#34;&#34;&#34;
+        result = []
+        k = 0
+        for j in self.Ak:
+            for i in self.Ak:
+                result.append(matrix[k] * i * j)
+                k += 1
+        return result
+
+    def jacobian(self):
+        &#34;&#34;&#34;
+        Function calculate jacobian and required parameters
+
+        Returns
+        -------
+        tuple
+            Return tuple of jacobian, dN_dKsi, dN_dEta, determinant and inverted jacobian
+        &#34;&#34;&#34;
+        # Obliczam pochodne funkcji kształtu po ksi i eta
+        dN_dKsi = np.zeros((4, global_data.ip), float)
+        dN_dEta = np.zeros((4, global_data.ip), float)
+        for i in range(0, global_data.ip):
+            for j in range(0, global_data.ip):
+                if j == 0:
+                    dN_dKsi[j][i] = -0.25 * (1 - self.eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 - self.ksi[i])
+                elif j == 1:
+                    dN_dKsi[j][i] = 0.25 * (1 - self.eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 + self.ksi[i])
+                elif j == 2:
+                    dN_dKsi[j][i] = 0.25 * (1 + self.eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 + self.ksi[i])
+                elif j == 3:
+                    dN_dKsi[j][i] = -0.25 * (1 + self.eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 - self.ksi[i])
+
+        jacobian = np.zeros((global_data.ip, 4), float)
+        jac_tmp = np.zeros(4, float)
+        determinant = []
+        inv_jacobian = np.zeros((global_data.ip, 4), float)
+
+        # Cztery jakobiany ułożone wierszami
+        for i in range(0, global_data.ip):
+            jac_tmp[0] = np.sum(dN_dKsi[:, i] * self.x)
+            jac_tmp[1] = np.sum(dN_dKsi[:, i] * self.y)
+            jac_tmp[2] = np.sum(dN_dEta[:, i] * self.x)
+            jac_tmp[3] = np.sum(dN_dEta[:, i] * self.y)
+            jacobian = np.vstack((jacobian[:i], jac_tmp))
+
+        for i in range(global_data.ip):
+            determinant.append(jacobian[i][0] * jacobian[i][3] - jacobian[i][1] * jacobian[i][2])
+
+        # zamiana wiersza jakobiany na macierz kwadratową
+        tmp_jacobian = []
+        for i in range(global_data.ip):
+            tmp_jacobian.append(np.zeros((2, 2), float))
+
+        # Obliczanie odwrotnego jakobianu
+        # zamiana wiersz na macierz 2x2 i odwrócenie
+        t = 0
+        for k in range(global_data.ip):
+            tmp = tmp_jacobian[k]
+            for i in range(2):
+                for j in range(2):
+                    tmp[i][j] = jacobian[k][t]
+                    t += 1
+            xD = np.linalg.inv(tmp)
+            inv_jacobian[k][0] = xD[0][0]
+            inv_jacobian[k][1] = xD[0][1]
+            inv_jacobian[k][2] = xD[1][0]
+            inv_jacobian[k][3] = xD[1][1]
+            t = 0
+
+        return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian
+
+    def H_matrix(self):
+        &#34;&#34;&#34;
+        Function calculate H_matrix
+
+        Returns
+        -------
+        tuple
+            Return tuple of H_matrix for each integration point and H_matrix for element
+        &#34;&#34;&#34;
+
+        dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
+        dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
+
+        H = []
+        for i in range(global_data.ip):
+            tmp1 = np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i]
+            tmp2 = np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]
+            H.append(global_data.k * (tmp1 + tmp2))
+
+        H_almost_end = self.integral(H)
+        H_end = 0
+        for i in H_almost_end:
+            H_end += i
+
+        return H_almost_end, H_end
+
+    @staticmethod
+    def _shape_func_value(ksi, eta, Flag):
+        &#34;&#34;&#34;
+            Function calculate values of shape function
+            Row - shape function
+            Column - iteration point
+        Parameters
+        ----------
+        ksi : List[floats]
+        eta : List[floats]
+        Flag : int
+
+        Returns
+        -------
+        list
+            Returns matrix with values of shape function
+        &#34;&#34;&#34;
+
+        if Flag != 0:
+            r = Flag
+            N = np.zeros((4, r), float)
+        else:
+            r = global_data.ip
+            N = np.zeros((4, global_data.ip), float)
+
+        for i in range(r):
+            N[0, i] = 0.25 * (1 - ksi[i]) * (1 - eta[i])
+            N[1, i] = 0.25 * (1 + ksi[i]) * (1 - eta[i])
+            N[2, i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
+            N[3, i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
+        return N
+
+    def C_matrix(self):
+        &#34;&#34;&#34;
+        Function calculate C_matrix
+
+        Returns
+        -------
+        tuple
+            Return tuple of C_matrix for each integration point and C_matrix for element
+        &#34;&#34;&#34;
+
+        N = self._shape_func_value(self.ksi, self.eta, 0)
+        C = []
+        for i in range(global_data.ip):
+            tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i]
+            C.append(global_data.Cw * global_data.ro * tmp1)
+
+        C_almost_end = self.integral(C)
+        C_end = 0
+        for i in C_almost_end:
+            C_end += i
+
+        return C_almost_end, C_end
+
+    def boundary_condition(self):
+        &#34;&#34;&#34;
+        Function calculate boundary_condition in element
+
+        Returns
+        -------
+        tuple
+            Return tuple of P_matrix and BCH_matrix
+        &#34;&#34;&#34;
+        if global_data.ip == 4:
+            choice2 = 2
+            ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
+            eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+            N = self._shape_func_value(ksi, eta, 8)
+        elif global_data.ip == 9:
+            choice2 = 3
+            ksi = [-sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5), -1, -1, -1]
+            eta = [-1, -1, -1, -sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5)]
+            N = self._shape_func_value(ksi, eta, 12)
+        elif global_data.ip == 16:
+            choice2 = 4
+            ksi = [-0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981, -0.339981, -0.861136,
+                   -1, -1, -1, -1]
+            eta = [-1, -1, -1, -1, -0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981,
+                   -0.339981, -0.861136]
+            N = self._shape_func_value(ksi, eta, 16)
+        else:
+            raise ValueError(&#34;Wrong value of global_data.ip&#34;)
+
+        BC = []
+        Pl = []
+        tmp = 0
+        tmp2 = 0
+        k = 0
+        L_x = global_data.B / (global_data.N_B - 1)
+        L_y = global_data.H / (global_data.N_H - 1)
+        for i in range(3):
+            if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+
+                    k += 1
+                if i == 0 or i == 2:
+                    BC.append(global_data.alfa * tmp * (L_x / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_x / 2))
+                else:
+                    BC.append(global_data.alfa * tmp * (L_y / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                tmp = 0
+                tmp2 = 0
+
+            else:
+                k += choice2
+
+            if i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+                    k += 1
+                BC.append(global_data.alfa * tmp * (L_y / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                tmp = 0
+                tmp2 = 0
+
+        BCH = np.zeros((4, 4), float)
+        P = np.zeros(4, float)
+        for i in range(len(Pl)):
+            BCH += BC[i]
+            P += Pl[i]
+
+        return P, BCH</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="MES.Element.Element"><code class="flex name class">
+<span>class <span class="ident">Element</span></span>
+<span>(</span><span>Id: List[int], nodes_c: List[<a title="MES.Node.Node" href="Node.html#MES.Node.Node">Node</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The class represents an element in the FEM mesh
+Creating an element involves the calculation of all its local parameters required for further global aggregations</p>
+<h2 id="attributes">Attributes</h2>
+<pre><code>nodes_ID : List[int]
+    Node ID list in the element (in set order)
+
+nodes : list[Node]
+    List of node coordinates in element (in set order)
+
+Ak : List[float]
+    List of parameters needed for integration
+
+x : List[float]
+    List of x coordinates for each node in element (in set order)
+
+y : List[float]
+    List of y coordinates for each node in element (in set order)
+
+ksi : List[float]
+    List of ksi coordinates for each integration_points in element (in row order)
+
+eta : List[float]
+    List of eta coordinates for each integration_points in element (in row order)
+
+jacob_matrix : ndarray
+    Matrix where each row is Jacobi matrix.
+    To visualize inv_jac, we take elements from the row representing the Jacobi matrix
+    Then insert them one by one with rows from the top
+
+dN_dEta : ndarray
+    Matrix of dN / dEta derivatives.
+    Row - Shape function
+    Column - integration point
+    In one line we have the values of one shape function at all integration points
+
+dN_dKsi : ndarray
+    Matrix of dN / dKsi derivatives.
+    Row - Shape function
+    Column - integration point
+    In one line we have the values of one shape function at all integration points
+
+determinant : List[float]
+    List of Jacobi matrices determinant
+
+inv_jac : List[float]
+    Matrix where each row is inverted Jacobi matrix.
+    To visualize inv_jac, we take elements from the row representing the inverted matrix
+    Then insert them one by one with rows from the top
+
+H_matrix_for_ip : list of ndarray
+    List of H_matrix for each integration point in element
+
+H_matrix_for_element : ndarray
+    H_matrix for element
+
+C_matrix_for_ip : ndarray
+    C_matrix for each integration point in element
+
+C_matrix_for_element : ndarray
+    C_matrix for element
+
+P_matrix_for_element : ndarray
+    P_matrix for element
+
+BCH_matrix_for_element : ndarray
+    BCH_matrix for element
+</code></pre>
+<p>Constructs all the necessary attributes for the Element object</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Id</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+<dd>Node ID list in the element (in set order)</dd>
+<dt><strong><code>nodes_c</code></strong> :&ensp;<code>list</code> of <code>Node</code></dt>
+<dd>List of node coordinates in element (in set order)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Element:
+    &#34;&#34;&#34;
+    The class represents an element in the FEM mesh
+    Creating an element involves the calculation of all its local parameters required for further global aggregations
+
+    Attributes
+    ----------
+        nodes_ID : List[int]
+            Node ID list in the element (in set order)
+
+        nodes : list[Node]
+            List of node coordinates in element (in set order)
+
+        Ak : List[float]
+            List of parameters needed for integration
+
+        x : List[float]
+            List of x coordinates for each node in element (in set order)
+
+        y : List[float]
+            List of y coordinates for each node in element (in set order)
+
+        ksi : List[float]
+            List of ksi coordinates for each integration_points in element (in row order)
+
+        eta : List[float]
+            List of eta coordinates for each integration_points in element (in row order)
+
+        jacob_matrix : ndarray
+            Matrix where each row is Jacobi matrix.
+            To visualize inv_jac, we take elements from the row representing the Jacobi matrix
+            Then insert them one by one with rows from the top
+
+        dN_dEta : ndarray
+            Matrix of dN / dEta derivatives.
+            Row - Shape function
+            Column - integration point
+            In one line we have the values of one shape function at all integration points
+
+        dN_dKsi : ndarray
+            Matrix of dN / dKsi derivatives.
+            Row - Shape function
+            Column - integration point
+            In one line we have the values of one shape function at all integration points
+
+        determinant : List[float]
+            List of Jacobi matrices determinant
+
+        inv_jac : List[float]
+            Matrix where each row is inverted Jacobi matrix.
+            To visualize inv_jac, we take elements from the row representing the inverted matrix
+            Then insert them one by one with rows from the top
+
+        H_matrix_for_ip : list of ndarray
+            List of H_matrix for each integration point in element
+
+        H_matrix_for_element : ndarray
+            H_matrix for element
+
+        C_matrix_for_ip : ndarray
+            C_matrix for each integration point in element
+
+        C_matrix_for_element : ndarray
+            C_matrix for element
+
+        P_matrix_for_element : ndarray
+            P_matrix for element
+
+        BCH_matrix_for_element : ndarray
+            BCH_matrix for element
+    &#34;&#34;&#34;
+
+    def __init__(self, Id: List[int], nodes_c: List[Node]):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Element object
+
+        Parameters
+        ----------
+        Id : list of int
+            Node ID list in the element (in set order)
+
+        nodes_c : list of Node
+            List of node coordinates in element (in set order)
+        &#34;&#34;&#34;
+        self.nodes_ID = Id
+
+        self.nodes = nodes_c
+        self.x = []
+        self.y = []
+        for i in self.nodes:
+            self.x.append(i.x)
+            self.y.append(i.y)
+
+        if global_data.ip == 4:
+            self.Ak = [1, 1]
+
+        elif int(global_data.ip) == 9:
+            self.Ak = [5 / 9, 8 / 9, 5 / 9]
+
+        elif int(global_data.ip) == 16:
+            self.Ak = [0.347855, 0.652145, 0.652145, 0.347855]
+
+        # Współrzędne punktów całkowania w zależności od schematu
+        if global_data.ip == 4:
+            node_v = [-1 / sqrt(3), 1 / sqrt(3)]
+
+        elif global_data.ip == 9:
+            node_v = [-sqrt(3 / 5), 0, sqrt(3 / 5)]
+
+        elif global_data.ip == 16:
+            node_v = [-0.861136, -0.339981, 0.339981, 0.861136]
+        else:
+            raise ValueError(&#34;Wrong value of global_data.ip&#34;)
+
+        # Tablica współrzędnych punktów całkowania - tworzona wierszami dla elementu
+        k = 0
+        t = 0
+        self.ksi = []
+        self.eta = []
+        for i in range(global_data.ip):
+            self.ksi.append(node_v[k])
+            self.eta.append(node_v[t])
+            k += 1
+            if k % len(node_v) == 0:
+                t += 1
+                k = 0
+        self.jacob_matrix, self.dN_dEta, self.dN_dKsi, self.determinant, self.inv_jac = self.jacobian()
+        self.H_matrix_for_ip, self.H_matrix_for_element = self.H_matrix()
+        self.C_matrix_for_ip, self.C_matrix_for_element = self.C_matrix()
+        self.P_matrix_for_element, self.BCH_matrix_for_element = self.boundary_condition()
+        self.H_matrix_for_element += self.BCH_matrix_for_element
+
+    def integral(self, matrix):
+        &#34;&#34;&#34;
+        Function multiply H or C matrices (must be square) with parameters is set order
+
+        Parameters
+        ----------
+        matrix : ndarray
+            Square matrix H or C
+
+        Returns
+        -------
+        list
+            Returns the list of matrix after multiplication by parameters
+        &#34;&#34;&#34;
+        result = []
+        k = 0
+        for j in self.Ak:
+            for i in self.Ak:
+                result.append(matrix[k] * i * j)
+                k += 1
+        return result
+
+    def jacobian(self):
+        &#34;&#34;&#34;
+        Function calculate jacobian and required parameters
+
+        Returns
+        -------
+        tuple
+            Return tuple of jacobian, dN_dKsi, dN_dEta, determinant and inverted jacobian
+        &#34;&#34;&#34;
+        # Obliczam pochodne funkcji kształtu po ksi i eta
+        dN_dKsi = np.zeros((4, global_data.ip), float)
+        dN_dEta = np.zeros((4, global_data.ip), float)
+        for i in range(0, global_data.ip):
+            for j in range(0, global_data.ip):
+                if j == 0:
+                    dN_dKsi[j][i] = -0.25 * (1 - self.eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 - self.ksi[i])
+                elif j == 1:
+                    dN_dKsi[j][i] = 0.25 * (1 - self.eta[i])
+                    dN_dEta[j][i] = -0.25 * (1 + self.ksi[i])
+                elif j == 2:
+                    dN_dKsi[j][i] = 0.25 * (1 + self.eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 + self.ksi[i])
+                elif j == 3:
+                    dN_dKsi[j][i] = -0.25 * (1 + self.eta[i])
+                    dN_dEta[j][i] = 0.25 * (1 - self.ksi[i])
+
+        jacobian = np.zeros((global_data.ip, 4), float)
+        jac_tmp = np.zeros(4, float)
+        determinant = []
+        inv_jacobian = np.zeros((global_data.ip, 4), float)
+
+        # Cztery jakobiany ułożone wierszami
+        for i in range(0, global_data.ip):
+            jac_tmp[0] = np.sum(dN_dKsi[:, i] * self.x)
+            jac_tmp[1] = np.sum(dN_dKsi[:, i] * self.y)
+            jac_tmp[2] = np.sum(dN_dEta[:, i] * self.x)
+            jac_tmp[3] = np.sum(dN_dEta[:, i] * self.y)
+            jacobian = np.vstack((jacobian[:i], jac_tmp))
+
+        for i in range(global_data.ip):
+            determinant.append(jacobian[i][0] * jacobian[i][3] - jacobian[i][1] * jacobian[i][2])
+
+        # zamiana wiersza jakobiany na macierz kwadratową
+        tmp_jacobian = []
+        for i in range(global_data.ip):
+            tmp_jacobian.append(np.zeros((2, 2), float))
+
+        # Obliczanie odwrotnego jakobianu
+        # zamiana wiersz na macierz 2x2 i odwrócenie
+        t = 0
+        for k in range(global_data.ip):
+            tmp = tmp_jacobian[k]
+            for i in range(2):
+                for j in range(2):
+                    tmp[i][j] = jacobian[k][t]
+                    t += 1
+            xD = np.linalg.inv(tmp)
+            inv_jacobian[k][0] = xD[0][0]
+            inv_jacobian[k][1] = xD[0][1]
+            inv_jacobian[k][2] = xD[1][0]
+            inv_jacobian[k][3] = xD[1][1]
+            t = 0
+
+        return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian
+
+    def H_matrix(self):
+        &#34;&#34;&#34;
+        Function calculate H_matrix
+
+        Returns
+        -------
+        tuple
+            Return tuple of H_matrix for each integration point and H_matrix for element
+        &#34;&#34;&#34;
+
+        dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
+        dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
+
+        H = []
+        for i in range(global_data.ip):
+            tmp1 = np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i]
+            tmp2 = np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]
+            H.append(global_data.k * (tmp1 + tmp2))
+
+        H_almost_end = self.integral(H)
+        H_end = 0
+        for i in H_almost_end:
+            H_end += i
+
+        return H_almost_end, H_end
+
+    @staticmethod
+    def _shape_func_value(ksi, eta, Flag):
+        &#34;&#34;&#34;
+            Function calculate values of shape function
+            Row - shape function
+            Column - iteration point
+        Parameters
+        ----------
+        ksi : List[floats]
+        eta : List[floats]
+        Flag : int
+
+        Returns
+        -------
+        list
+            Returns matrix with values of shape function
+        &#34;&#34;&#34;
+
+        if Flag != 0:
+            r = Flag
+            N = np.zeros((4, r), float)
+        else:
+            r = global_data.ip
+            N = np.zeros((4, global_data.ip), float)
+
+        for i in range(r):
+            N[0, i] = 0.25 * (1 - ksi[i]) * (1 - eta[i])
+            N[1, i] = 0.25 * (1 + ksi[i]) * (1 - eta[i])
+            N[2, i] = 0.25 * (1 + ksi[i]) * (1 + eta[i])
+            N[3, i] = 0.25 * (1 - ksi[i]) * (1 + eta[i])
+        return N
+
+    def C_matrix(self):
+        &#34;&#34;&#34;
+        Function calculate C_matrix
+
+        Returns
+        -------
+        tuple
+            Return tuple of C_matrix for each integration point and C_matrix for element
+        &#34;&#34;&#34;
+
+        N = self._shape_func_value(self.ksi, self.eta, 0)
+        C = []
+        for i in range(global_data.ip):
+            tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i]
+            C.append(global_data.Cw * global_data.ro * tmp1)
+
+        C_almost_end = self.integral(C)
+        C_end = 0
+        for i in C_almost_end:
+            C_end += i
+
+        return C_almost_end, C_end
+
+    def boundary_condition(self):
+        &#34;&#34;&#34;
+        Function calculate boundary_condition in element
+
+        Returns
+        -------
+        tuple
+            Return tuple of P_matrix and BCH_matrix
+        &#34;&#34;&#34;
+        if global_data.ip == 4:
+            choice2 = 2
+            ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
+            eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+            N = self._shape_func_value(ksi, eta, 8)
+        elif global_data.ip == 9:
+            choice2 = 3
+            ksi = [-sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5), -1, -1, -1]
+            eta = [-1, -1, -1, -sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5)]
+            N = self._shape_func_value(ksi, eta, 12)
+        elif global_data.ip == 16:
+            choice2 = 4
+            ksi = [-0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981, -0.339981, -0.861136,
+                   -1, -1, -1, -1]
+            eta = [-1, -1, -1, -1, -0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981,
+                   -0.339981, -0.861136]
+            N = self._shape_func_value(ksi, eta, 16)
+        else:
+            raise ValueError(&#34;Wrong value of global_data.ip&#34;)
+
+        BC = []
+        Pl = []
+        tmp = 0
+        tmp2 = 0
+        k = 0
+        L_x = global_data.B / (global_data.N_B - 1)
+        L_y = global_data.H / (global_data.N_H - 1)
+        for i in range(3):
+            if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+
+                    k += 1
+                if i == 0 or i == 2:
+                    BC.append(global_data.alfa * tmp * (L_x / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_x / 2))
+                else:
+                    BC.append(global_data.alfa * tmp * (L_y / 2))
+                    Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                tmp = 0
+                tmp2 = 0
+
+            else:
+                k += choice2
+
+            if i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
+                for j in range(choice2):
+                    tmp2 += N[:, k] * self.Ak[j]
+                    tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+                    k += 1
+                BC.append(global_data.alfa * tmp * (L_y / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+                tmp = 0
+                tmp2 = 0
+
+        BCH = np.zeros((4, 4), float)
+        P = np.zeros(4, float)
+        for i in range(len(Pl)):
+            BCH += BC[i]
+            P += Pl[i]
+
+        return P, BCH</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="MES.Element.Element.C_matrix"><code class="name flex">
+<span>def <span class="ident">C_matrix</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function calculate C_matrix</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Return tuple of C_matrix for each integration point and C_matrix for element</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def C_matrix(self):
+    &#34;&#34;&#34;
+    Function calculate C_matrix
+
+    Returns
+    -------
+    tuple
+        Return tuple of C_matrix for each integration point and C_matrix for element
+    &#34;&#34;&#34;
+
+    N = self._shape_func_value(self.ksi, self.eta, 0)
+    C = []
+    for i in range(global_data.ip):
+        tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i]
+        C.append(global_data.Cw * global_data.ro * tmp1)
+
+    C_almost_end = self.integral(C)
+    C_end = 0
+    for i in C_almost_end:
+        C_end += i
+
+    return C_almost_end, C_end</code></pre>
+</details>
+</dd>
+<dt id="MES.Element.Element.H_matrix"><code class="name flex">
+<span>def <span class="ident">H_matrix</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function calculate H_matrix</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Return tuple of H_matrix for each integration point and H_matrix for element</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def H_matrix(self):
+    &#34;&#34;&#34;
+    Function calculate H_matrix
+
+    Returns
+    -------
+    tuple
+        Return tuple of H_matrix for each integration point and H_matrix for element
+    &#34;&#34;&#34;
+
+    dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
+    dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
+
+    H = []
+    for i in range(global_data.ip):
+        tmp1 = np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i]
+        tmp2 = np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]
+        H.append(global_data.k * (tmp1 + tmp2))
+
+    H_almost_end = self.integral(H)
+    H_end = 0
+    for i in H_almost_end:
+        H_end += i
+
+    return H_almost_end, H_end</code></pre>
+</details>
+</dd>
+<dt id="MES.Element.Element.boundary_condition"><code class="name flex">
+<span>def <span class="ident">boundary_condition</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function calculate boundary_condition in element</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Return tuple of P_matrix and BCH_matrix</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def boundary_condition(self):
+    &#34;&#34;&#34;
+    Function calculate boundary_condition in element
+
+    Returns
+    -------
+    tuple
+        Return tuple of P_matrix and BCH_matrix
+    &#34;&#34;&#34;
+    if global_data.ip == 4:
+        choice2 = 2
+        ksi = [-1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3), -1, - 1]
+        eta = [-1, -1, -1 / sqrt(3), 1 / sqrt(3), 1, 1, 1 / sqrt(3), -1 / sqrt(3)]
+        N = self._shape_func_value(ksi, eta, 8)
+    elif global_data.ip == 9:
+        choice2 = 3
+        ksi = [-sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5), -1, -1, -1]
+        eta = [-1, -1, -1, -sqrt(3 / 5), 0, sqrt(3 / 5), 1, 1, 1, sqrt(3 / 5), 0, -sqrt(3 / 5)]
+        N = self._shape_func_value(ksi, eta, 12)
+    elif global_data.ip == 16:
+        choice2 = 4
+        ksi = [-0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981, -0.339981, -0.861136,
+               -1, -1, -1, -1]
+        eta = [-1, -1, -1, -1, -0.861136, -0.339981, 0.339981, 0.861136, 1, 1, 1, 1, 0.861136, 0.339981,
+               -0.339981, -0.861136]
+        N = self._shape_func_value(ksi, eta, 16)
+    else:
+        raise ValueError(&#34;Wrong value of global_data.ip&#34;)
+
+    BC = []
+    Pl = []
+    tmp = 0
+    tmp2 = 0
+    k = 0
+    L_x = global_data.B / (global_data.N_B - 1)
+    L_y = global_data.H / (global_data.N_H - 1)
+    for i in range(3):
+        if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
+            for j in range(choice2):
+                tmp2 += N[:, k] * self.Ak[j]
+                tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+
+                k += 1
+            if i == 0 or i == 2:
+                BC.append(global_data.alfa * tmp * (L_x / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * (L_x / 2))
+            else:
+                BC.append(global_data.alfa * tmp * (L_y / 2))
+                Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+            tmp = 0
+            tmp2 = 0
+
+        else:
+            k += choice2
+
+        if i == 2 and self.nodes[3].bc == 1 and self.nodes[0].bc == 1:
+            for j in range(choice2):
+                tmp2 += N[:, k] * self.Ak[j]
+                tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
+                k += 1
+            BC.append(global_data.alfa * tmp * (L_y / 2))
+            Pl.append(-global_data.alfa * 1200 * tmp2 * (L_y / 2))
+            tmp = 0
+            tmp2 = 0
+
+    BCH = np.zeros((4, 4), float)
+    P = np.zeros(4, float)
+    for i in range(len(Pl)):
+        BCH += BC[i]
+        P += Pl[i]
+
+    return P, BCH</code></pre>
+</details>
+</dd>
+<dt id="MES.Element.Element.integral"><code class="name flex">
+<span>def <span class="ident">integral</span></span>(<span>self, matrix)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function multiply H or C matrices (must be square) with parameters is set order</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>matrix</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Square matrix H or C</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>Returns the list of matrix after multiplication by parameters</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def integral(self, matrix):
+    &#34;&#34;&#34;
+    Function multiply H or C matrices (must be square) with parameters is set order
+
+    Parameters
+    ----------
+    matrix : ndarray
+        Square matrix H or C
+
+    Returns
+    -------
+    list
+        Returns the list of matrix after multiplication by parameters
+    &#34;&#34;&#34;
+    result = []
+    k = 0
+    for j in self.Ak:
+        for i in self.Ak:
+            result.append(matrix[k] * i * j)
+            k += 1
+    return result</code></pre>
+</details>
+</dd>
+<dt id="MES.Element.Element.jacobian"><code class="name flex">
+<span>def <span class="ident">jacobian</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function calculate jacobian and required parameters</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Return tuple of jacobian, dN_dKsi, dN_dEta, determinant and inverted jacobian</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def jacobian(self):
+    &#34;&#34;&#34;
+    Function calculate jacobian and required parameters
+
+    Returns
+    -------
+    tuple
+        Return tuple of jacobian, dN_dKsi, dN_dEta, determinant and inverted jacobian
+    &#34;&#34;&#34;
+    # Obliczam pochodne funkcji kształtu po ksi i eta
+    dN_dKsi = np.zeros((4, global_data.ip), float)
+    dN_dEta = np.zeros((4, global_data.ip), float)
+    for i in range(0, global_data.ip):
+        for j in range(0, global_data.ip):
+            if j == 0:
+                dN_dKsi[j][i] = -0.25 * (1 - self.eta[i])
+                dN_dEta[j][i] = -0.25 * (1 - self.ksi[i])
+            elif j == 1:
+                dN_dKsi[j][i] = 0.25 * (1 - self.eta[i])
+                dN_dEta[j][i] = -0.25 * (1 + self.ksi[i])
+            elif j == 2:
+                dN_dKsi[j][i] = 0.25 * (1 + self.eta[i])
+                dN_dEta[j][i] = 0.25 * (1 + self.ksi[i])
+            elif j == 3:
+                dN_dKsi[j][i] = -0.25 * (1 + self.eta[i])
+                dN_dEta[j][i] = 0.25 * (1 - self.ksi[i])
+
+    jacobian = np.zeros((global_data.ip, 4), float)
+    jac_tmp = np.zeros(4, float)
+    determinant = []
+    inv_jacobian = np.zeros((global_data.ip, 4), float)
+
+    # Cztery jakobiany ułożone wierszami
+    for i in range(0, global_data.ip):
+        jac_tmp[0] = np.sum(dN_dKsi[:, i] * self.x)
+        jac_tmp[1] = np.sum(dN_dKsi[:, i] * self.y)
+        jac_tmp[2] = np.sum(dN_dEta[:, i] * self.x)
+        jac_tmp[3] = np.sum(dN_dEta[:, i] * self.y)
+        jacobian = np.vstack((jacobian[:i], jac_tmp))
+
+    for i in range(global_data.ip):
+        determinant.append(jacobian[i][0] * jacobian[i][3] - jacobian[i][1] * jacobian[i][2])
+
+    # zamiana wiersza jakobiany na macierz kwadratową
+    tmp_jacobian = []
+    for i in range(global_data.ip):
+        tmp_jacobian.append(np.zeros((2, 2), float))
+
+    # Obliczanie odwrotnego jakobianu
+    # zamiana wiersz na macierz 2x2 i odwrócenie
+    t = 0
+    for k in range(global_data.ip):
+        tmp = tmp_jacobian[k]
+        for i in range(2):
+            for j in range(2):
+                tmp[i][j] = jacobian[k][t]
+                t += 1
+        xD = np.linalg.inv(tmp)
+        inv_jacobian[k][0] = xD[0][0]
+        inv_jacobian[k][1] = xD[0][1]
+        inv_jacobian[k][2] = xD[1][0]
+        inv_jacobian[k][3] = xD[1][1]
+        t = 0
+
+    return jacobian, dN_dKsi, dN_dEta, determinant, inv_jacobian</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="MES" href="index.html">MES</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="MES.Element.Element" href="#MES.Element.Element">Element</a></code></h4>
+<ul class="">
+<li><code><a title="MES.Element.Element.C_matrix" href="#MES.Element.Element.C_matrix">C_matrix</a></code></li>
+<li><code><a title="MES.Element.Element.H_matrix" href="#MES.Element.Element.H_matrix">H_matrix</a></code></li>
+<li><code><a title="MES.Element.Element.boundary_condition" href="#MES.Element.Element.boundary_condition">boundary_condition</a></code></li>
+<li><code><a title="MES.Element.Element.integral" href="#MES.Element.Element.integral">integral</a></code></li>
+<li><code><a title="MES.Element.Element.jacobian" href="#MES.Element.Element.jacobian">jacobian</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

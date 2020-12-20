@@ -1,11 +1,10 @@
-from multiprocessing import Pool
-
-import xlwt
-from MES.Data import global_data
-from MES import Node as n, Element as e
-from numpy import zeros
 import matplotlib.pyplot as plt
 import numpy as np
+import xlwt
+from numpy import zeros
+
+from MES import Node as n, Element as e
+from MES.Data import global_data
 
 
 # Przechowuje listę elementów i listę węzłów potrzebne do stworzenia siatki
@@ -52,10 +51,7 @@ class FEM_Grid:
 
         self.nodes = []
         self.elements = []
-        if is_first:
-            self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
-        else:
-            self.temperature_of_nodes = temps
+        self.get_temps(is_first, temps)
         k = 0
 
         # Tworzenie współrzędnych węzłów
@@ -104,18 +100,7 @@ class FEM_Grid:
                 tmp[4] += 1
                 column_end = 0
 
-        H = []
-        C = []
-        P = []
-        for i in self.elements:
-            H.append(i.H_matrix_for_element)
-            C.append(i.C_matrix_for_element)
-            P.append(i.P_matrix_for_element)
-
-        t = self.matrix_aggregation(H, C, P)
-        self.H_global = t[0]
-        self.C_global = t[1]
-        self.P_global = t[2]
+        self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
     def plot_grid(self):
         """
@@ -139,7 +124,7 @@ class FEM_Grid:
         ax.grid(which='both')
         plt.show()
 
-    def matrix_aggregation(self, H_locals, C_locals, P_locals):
+    def matrix_aggregation(self):
         """
         Function aggregate local matrices to global
         Parameters
@@ -158,10 +143,11 @@ class FEM_Grid:
         Hg = zeros((r, r), float)
         Cg = zeros((r, r), float)
         for i in range(len(self.elements)):
-            h1 = H_locals[i]
-            c1 = C_locals[i]
+            h1 = self.elements[i].H_matrix_for_element
+            c1 = self.elements[i].C_matrix_for_element
             for j in range(4):
-                Pg[self.elements[i].nodes_ID[j]] += P_locals[i][j]
+                p1 = self.elements[i].P_matrix_for_element
+                Pg[self.elements[i].nodes_ID[j]] += p1[j]
                 for k in range(4):
                     Hg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += h1[j][k]
                     Cg[self.elements[i].nodes_ID[j]][self.elements[i].nodes_ID[k]] += c1[j][k]
@@ -264,3 +250,9 @@ class FEM_Grid:
             xD = omg
 
         book.save("MES.xls")
+
+    def get_temps(self, is_first, temps):
+        if is_first:
+            self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+        else:
+            self.temperature_of_nodes = temps
