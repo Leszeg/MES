@@ -16,4 +16,4 @@ class GlobalData:
         self.Cw = float(specific_heat)  # Ciepło właściwe
         self.k = float(conductivity)  # Przewodność cieplna
         self.ro = float(density)  # Gęstość materiału
-        self.pc = int(integration_points)  # Ilość punktów całkowania dla jednego elementu
+        self.ip = int(integration_points)  # Ilość punktów całkowania dla jednego elementu

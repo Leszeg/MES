@@ -1,11 +1,36 @@
 class Node:
-    def __init__(self, X, Y, T0, BC):
-        # Współrzędne globalne - (x,y)
-        self.x = float(X)
-        self.y = float(Y)
+    """
+    Class represents the node in the global coordinate system:
 
-        # Temperatura w węźle
-        self.t0 = float(T0)
 
-        # Określenie występowanie warunku brzegowego
+    Attributes:
+    ----------
+    x : float
+        x coordinate.
+    y : float
+        y coordinate
+    t0 : float
+        Node temperature
+    bc : float
+        Flag needed to check if there is a boundary condition
+    """
+
+    def __init__(self, X: float, Y: float, T0: float, BC: bool):
+        """
+        Constructs all the necessary attributes for the Node object
+
+        Parameters
+        ----------
+        X : float
+            x coordinate
+        Y : float
+            y coordinate
+        T0 : float
+            Node temperature
+        BC : bool
+            Flag needed to check if there is a boundary condition
+        """
+        self.x = X
+        self.y = Y
+        self.t0 = T0
         self.bc = BC
