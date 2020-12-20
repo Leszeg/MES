@@ -240,11 +240,9 @@ class Element:
         dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
         dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
 
-        H = []
-        for i in range(global_data.ip):
-            tmp1 = np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i]
-            tmp2 = np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]
-            H.append(global_data.k * (tmp1 + tmp2))
+        H = [(global_data.k * (np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i] +
+                               np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]))
+             for i in range(global_data.ip)]
 
         H_almost_end = self.integral(H)
         H_end = 0
@@ -296,10 +294,9 @@ class Element:
         """
 
         N = self._shape_func_value(self.ksi, self.eta, 0)
-        C = []
-        for i in range(global_data.ip):
-            tmp1 = np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i]
-            C.append(global_data.Cw * global_data.ro * tmp1)
+
+        C = [(global_data.Cw * global_data.ro * np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i])
+             for i in range(global_data.ip)]
 
         C_almost_end = self.integral(C)
         C_end = 0

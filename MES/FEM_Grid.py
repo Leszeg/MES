@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xlwt
 from numpy import zeros
+from numpy.linalg import solve
 
 from MES import Node as n, Element as e
 from MES.Data import global_data
 
 
 # Przechowuje listę elementów i listę węzłów potrzebne do stworzenia siatki
-class FEM_Grid:
+class FEM_Grid(object):
     """
     Class represents FEM grid
 
@@ -48,7 +49,6 @@ class FEM_Grid:
 
         d_x = global_data.B / (global_data.N_B - 1)
         d_y = global_data.H / (global_data.N_H - 1)
-
         self.nodes = []
         self.elements = []
         self.get_temps(is_first, temps)
@@ -102,6 +102,20 @@ class FEM_Grid:
 
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
+    def calculate_matrix(self):
+        for j in range(len(self.elements)):
+            self.elements[j].H_matrix()
+            self.elements[j].C_matrix()
+            self.elements[j].boundary_condition()
+
+    def solve_ode(self, temps):
+        Hz = self.H_global + (self.C_global / global_data.sst)
+        x = -np.dot(self.C_global / global_data.sst, temps.T).T
+        Pz = -(self.P_global + x)
+        x = solve(Hz, Pz.T).T
+        self.get_temps(False, x)
+        return x
+
     def plot_grid(self):
         """
         Function plot grid elements and nodes.
@@ -122,7 +136,7 @@ class FEM_Grid:
                         plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
 
         ax.grid(which='both')
-        plt.show()
+        plt.savefig("plot.png")
 
     def matrix_aggregation(self):
         """
@@ -254,5 +268,7 @@ class FEM_Grid:
     def get_temps(self, is_first, temps):
         if is_first:
             self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+            return self.temperature_of_nodes
         else:
             self.temperature_of_nodes = temps
+            return self.temperature_of_nodes

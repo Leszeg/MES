@@ -1,5 +1,6 @@
-import MES
 import time
+
+import MES
 
 if __name__ == '__main__':
     start = time.time()
