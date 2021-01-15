@@ -47,8 +47,9 @@ class FEM_Grid(object):
             List of temperatures in nodes
         """
 
-        d_x = global_data.B / (global_data.N_B -1)
-        d_y = global_data.H / (global_data.N_H -1)
+        d_x = global_data.B / (global_data.N_B - 1)
+        d_y = global_data.H / (global_data.N_H - 1)
+
         self.nodes = []
         self.elements = []
         self.get_temps(is_first, temps)
@@ -59,7 +60,7 @@ class FEM_Grid(object):
             if i1 % 6 == 0 and i1 != 0:
                 choice = not choice
             if not choice:
-                for j1 in range(global_data.npm*3):
+                for j1 in range(global_data.npm * 3):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if j1 == 0:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
@@ -92,53 +93,58 @@ class FEM_Grid(object):
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         column_end = 0
         k = 0
-        for x in range(global_data.nE):
-            if k % 2 == 0 and k != 0:
-                if column_end < 6 - 1:
-                    ID = []
-                    ID.append(tmp[4])
-                    ID.append(ID[0] + 3)
-                    ID.append(ID[1] + 1)
-                    ID.append(ID[0] + 1)
-                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                    self.elements.append(e.Element(ID, nod))
-                    column_end += 1
-                    tmp[0] += 1
-                    tmp[1] += 1
-                    tmp[2] += 1
-                    tmp[3] += 1
-                    tmp[4] += 1
-                else:
-                    tmp[0] += 1
-                    tmp[1] += 1
-                    tmp[2] += 1
-                    tmp[3] += 1
-                    tmp[4] += 1
-                    column_end = 0
-                    k = k + 1
+        for x2 in range(global_data.N_B):
+            if k % 6 == 0 and k != 0:
+                for x in range(global_data.npm * 3):
+                    if column_end < 9 - 1:
+                        ID = []
+                        ID.append(tmp[4])
+                        ID.append(ID[0] + 3)
+                        ID.append(ID[1] + 1)
+                        ID.append(ID[0] + 1)
+                        nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                        self.elements.append(e.Element(ID, nod))
+                        column_end += 1
+                        tmp[0] += 1
+                        tmp[1] += 1
+                        tmp[2] += 1
+                        tmp[3] += 1
+                        tmp[4] += 1
+                    else:
+                        tmp[0] += 1
+                        tmp[1] += 1
+                        tmp[2] += 1
+                        tmp[3] += 1
+                        tmp[4] += 1
+                        column_end = 0
             else:
-                if column_end < global_data.N_H - 1:
-                    ID = []
-                    ID.append(tmp[4])
-                    ID.append(ID[0] + global_data.N_H)
-                    ID.append(ID[1] + 1)
-                    ID.append(ID[0] + 1)
-                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                    self.elements.append(e.Element(ID, nod))
-                    column_end += 1
-                    tmp[0] += 1
-                    tmp[1] += 1
-                    tmp[2] += 1
-                    tmp[3] += 1
-                    tmp[4] += 1
-                else:
-                    tmp[0] += 1
-                    tmp[1] += 1
-                    tmp[2] += 1
-                    tmp[3] += 1
-                    tmp[4] += 1
-                    column_end = 0
-                    k = k + 1
+                for x1 in range(global_data.N_H):
+                    if column_end < global_data.N_H - 1:
+                        ID = []
+                        ID.append(tmp[4])
+                        ID.append(ID[0] + global_data.N_H)
+                        ID.append(ID[1] + 1)
+                        ID.append(ID[0] + 1)
+                        print(ID)
+                        nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                        self.elements.append(e.Element(ID, nod))
+                        column_end += 1
+                        tmp[0] += 1
+                        tmp[1] += 1
+                        tmp[2] += 1
+                        tmp[3] += 1
+                        tmp[4] += 1
+
+                    else:
+                        tmp[0] += 1
+                        tmp[1] += 1
+                        tmp[2] += 1
+                        tmp[3] += 1
+                        tmp[4] += 1
+                        column_end = 0
+
+            k = k + 1
+
 
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
