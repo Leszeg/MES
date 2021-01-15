@@ -5,9 +5,10 @@
 300     alfa
 0.007   H
 0.014   B
-70       N_H
-140       N_B
+21       N_H
+42       N_B
 700     specific_heat
 25      conductivity
 7800    density
 4       integration_points
+3       number_of_nodes_per_mm

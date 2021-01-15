@@ -30,7 +30,8 @@ global_data = GlobalData(data["initial_temperature"],
                          data["specific_heat"],
                          data["conductivity"],
                          data["density"],
-                         data["integration_points"])
+                         data["integration_points"],
+                         data["number_of_nodes_per_mm"])
 
 
 def print_grid_data():

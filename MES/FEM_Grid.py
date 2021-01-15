@@ -47,17 +47,29 @@ class FEM_Grid(object):
             List of temperatures in nodes
         """
 
-        d_x = global_data.B / (global_data.N_B - 1)
-        d_y = global_data.H / (global_data.N_H - 1)
+        d_x = global_data.B / (global_data.N_B -1)
+        d_y = global_data.H / (global_data.N_H -1)
         self.nodes = []
         self.elements = []
         self.get_temps(is_first, temps)
         k = 0
-
+        choice = True
         # Tworzenie współrzędnych węzłów
         for i1 in range(global_data.N_B):
-            if (k + 1) % 2 == 0:
-                for j1 in range(30):
+            if i1 % 6 == 0 and i1 != 0:
+                choice = not choice
+            if not choice:
+                for j1 in range(global_data.npm*3):
+                    # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
+                    if j1 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif j1 == 9 - 1:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    else:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
+
+            else:
+                for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if i1 == 0:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
@@ -67,23 +79,11 @@ class FEM_Grid(object):
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif j1 > 7 and k % 6 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     else:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
-                    k += 1
-
-            for j1 in range(global_data.N_H):
-                # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
-                if i1 == 0:
-                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                elif j1 == 0:
-                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                elif j1 == global_data.N_H - 1:
-                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                elif i1 == global_data.N_B - 1:
-                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                else:
-                    self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
-                k += 1
+            k += 1
 
         # Tworzenie elementów
         # Pętla for ma dodatek '+ global_data.N_B - 1' ponieważ przy tworzeniu siatki
@@ -92,12 +92,12 @@ class FEM_Grid(object):
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         column_end = 0
         k = 0
-        if k % 2 == 0 and k != 0:
-            for i in range(30):
-                if column_end < 30 - 1:
+        for x in range(global_data.nE):
+            if k % 2 == 0 and k != 0:
+                if column_end < 6 - 1:
                     ID = []
                     ID.append(tmp[4])
-                    ID.append(ID[0] + 30)
+                    ID.append(ID[0] + 3)
                     ID.append(ID[1] + 1)
                     ID.append(ID[0] + 1)
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
@@ -115,8 +115,8 @@ class FEM_Grid(object):
                     tmp[3] += 1
                     tmp[4] += 1
                     column_end = 0
-        else:
-            for i in range(global_data.nE + global_data.N_B - 1):
+                    k = k + 1
+            else:
                 if column_end < global_data.N_H - 1:
                     ID = []
                     ID.append(tmp[4])
@@ -138,6 +138,7 @@ class FEM_Grid(object):
                     tmp[3] += 1
                     tmp[4] += 1
                     column_end = 0
+                    k = k + 1
 
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
@@ -162,7 +163,7 @@ class FEM_Grid(object):
         Red - boundary condition
         """
         fig = plt.figure()
-        ax = fig.add_subplot(0.008, 0.014, 1)
+        ax = fig.add_subplot(1, 1, 1)
         for element in self.elements:
             for i in range(4):
                 if element.nodes[i].bc == 0:
@@ -175,7 +176,17 @@ class FEM_Grid(object):
                         plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
 
         ax.grid(which='both')
-        plt.savefig("plot.png")
+        plt.show()
+        # plt.savefig("plot.png")
+
+    def showMeshPlot(self):
+        x = []
+        y = []
+        for node in self.nodes:
+            x.append(node.x)
+            y.append(node.y)
+        plt.plot(x, y, ".k")
+        plt.show()
 
     def matrix_aggregation(self):
         """

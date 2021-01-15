@@ -1,7 +1,7 @@
 class GlobalData:
 
     def __init__(self, initial_temperature, simulation_time, simulation_step_time, ambient_temperature, alfa, H, B, N_H,
-                 N_B, specific_heat, conductivity, density, integration_points):
+                 N_B, specific_heat, conductivity, density, integration_points, np):
         self.it = float(initial_temperature)  # Temperatura początkowa
         self.st = float(simulation_time)  # Czas symulacji
         self.sst = float(simulation_step_time)  # Czas kroku symulacji
@@ -11,8 +11,9 @@ class GlobalData:
         self.B = float(B)  # Szerokość siatki
         self.N_H = int(N_H)  # Ilość węzłów na wysokości
         self.N_B = int(N_B)  # Ilość węzłów na szerokości
-        self.nE = int((self.N_H - 1) * (self.N_B - 1))  # Ilość elementów w siatce
-        self.nN = int(self.N_H * self.N_B)  # Ilość węzłów w siatce
+        self.npm = int(np)  # Ilość węzłów na mm
+        self.nN = int(4 * (self.N_H * 2 * self.npm) + 3 * (2 * self.npm * 3))  # Ilość węzłów w siatce
+        self.nE = int(644)  # Ilość elementów w siatce
         self.Cw = float(specific_heat)  # Ciepło właściwe
         self.k = float(conductivity)  # Przewodność cieplna
         self.ro = float(density)  # Gęstość materiału

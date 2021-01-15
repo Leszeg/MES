@@ -56,3 +56,4 @@ def made(g):
 def run():
     g = FEM_Grid(True, 0)
     g.plot_grid()
+    g.showMeshPlot()
