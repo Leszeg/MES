@@ -56,6 +56,21 @@ class FEM_Grid(object):
 
         # Tworzenie współrzędnych węzłów
         for i1 in range(global_data.N_B):
+            if (k + 1) % 2 == 0:
+                for j1 in range(30):
+                    # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
+                    if i1 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif j1 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif j1 == global_data.N_H - 1:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif i1 == global_data.N_B - 1:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    else:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
+                    k += 1
+
             for j1 in range(global_data.N_H):
                 # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                 if i1 == 0:
@@ -76,29 +91,53 @@ class FEM_Grid(object):
         # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         column_end = 0
-
-        for i in range(global_data.nE + global_data.N_B - 1):
-            if column_end < global_data.N_H - 1:
-                ID = []
-                ID.append(tmp[4])
-                ID.append(ID[0] + global_data.N_H)
-                ID.append(ID[1] + 1)
-                ID.append(ID[0] + 1)
-                nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                self.elements.append(e.Element(ID, nod))
-                column_end += 1
-                tmp[0] += 1
-                tmp[1] += 1
-                tmp[2] += 1
-                tmp[3] += 1
-                tmp[4] += 1
-            else:
-                tmp[0] += 1
-                tmp[1] += 1
-                tmp[2] += 1
-                tmp[3] += 1
-                tmp[4] += 1
-                column_end = 0
+        k = 0
+        if k % 2 == 0 and k != 0:
+            for i in range(30):
+                if column_end < 30 - 1:
+                    ID = []
+                    ID.append(tmp[4])
+                    ID.append(ID[0] + 30)
+                    ID.append(ID[1] + 1)
+                    ID.append(ID[0] + 1)
+                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                    self.elements.append(e.Element(ID, nod))
+                    column_end += 1
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                else:
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                    column_end = 0
+        else:
+            for i in range(global_data.nE + global_data.N_B - 1):
+                if column_end < global_data.N_H - 1:
+                    ID = []
+                    ID.append(tmp[4])
+                    ID.append(ID[0] + global_data.N_H)
+                    ID.append(ID[1] + 1)
+                    ID.append(ID[0] + 1)
+                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                    self.elements.append(e.Element(ID, nod))
+                    column_end += 1
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                else:
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                    column_end = 0
 
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
@@ -123,7 +162,7 @@ class FEM_Grid(object):
         Red - boundary condition
         """
         fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
+        ax = fig.add_subplot(0.008, 0.014, 1)
         for element in self.elements:
             for i in range(4):
                 if element.nodes[i].bc == 0:

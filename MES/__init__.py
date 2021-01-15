@@ -38,17 +38,21 @@ def made(g):
         writer.writerows(zip(*d.values()))
 
 
+# def run():
+#     """
+#     Function calls calculate grid and plot printing parallel
+#     """
+#     BaseManager.register('mc', FEM_Grid)
+#     manager = BaseManager()
+#     manager.start()
+#     g = manager.mc(True, 0)
+#     p1 = Process(target=g.plot_grid)
+#     p2 = Process(target=made, args=[g])
+#     p1.start()
+#     p2.start()
+#     p1.join()
+#     p2.join()
+
 def run():
-    """
-    Function calls calculate grid and plot printing parallel
-    """
-    BaseManager.register('mc', FEM_Grid)
-    manager = BaseManager()
-    manager.start()
-    g = manager.mc(True, 0)
-    p1 = Process(target=g.plot_grid)
-    p2 = Process(target=made, args=[g])
-    p1.start()
-    p2.start()
-    p1.join()
-    p2.join()
+    g = FEM_Grid(True, 0)
+    g.plot_grid()

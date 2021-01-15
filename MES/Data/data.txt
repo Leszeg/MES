@@ -3,10 +3,10 @@
 1      simulation_step_time
 1200    ambient_temperature
 300     alfa
-0.100   H
-0.100   B
-31       N_H
-31       N_B
+0.007   H
+0.014   B
+70       N_H
+140       N_B
 700     specific_heat
 25      conductivity
 7800    density
