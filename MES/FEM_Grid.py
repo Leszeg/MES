@@ -60,15 +60,15 @@ class FEM_Grid(object):
             if i1 % 6 == 0 and i1 != 0:
                 choice = not choice
             if not choice:
-                for j1 in range(global_data.npm * 3):
+                for p in range(global_data.npm * 3):
+                    pass
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
-                    if j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                    elif j1 == 9 - 1:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    if p == 0:
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], True))
+                    elif p == 9 - 1:
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], True))
                     else:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
-
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], False))
             else:
                 for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
@@ -80,7 +80,7 @@ class FEM_Grid(object):
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                    elif j1 > 7 and k % 6 == 0:
+                    elif i1 % 5 == 0 and j1 > 7:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     else:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
@@ -91,61 +91,69 @@ class FEM_Grid(object):
         # elementy muszą być odpowiednio numerowane i będą dodatkowe 'puste przebiegi'
         # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
-        column_end = 0
-        k = 0
+        choice = True
         for x2 in range(global_data.N_B):
-            if k % 6 == 0 and k != 0:
+            if x2 % 5 == 0 and x2 != 0:
+                choice = not choice
+            if not choice:
                 for x in range(global_data.npm * 3):
-                    if column_end < 9 - 1:
-                        ID = []
-                        ID.append(tmp[4])
-                        ID.append(ID[0] + 3)
-                        ID.append(ID[1] + 1)
-                        ID.append(ID[0] + 1)
-                        nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                        self.elements.append(e.Element(ID, nod))
-                        column_end += 1
+                    if x == global_data.npm * 3 - 1:
                         tmp[0] += 1
                         tmp[1] += 1
                         tmp[2] += 1
                         tmp[3] += 1
                         tmp[4] += 1
-                    else:
-                        tmp[0] += 1
-                        tmp[1] += 1
-                        tmp[2] += 1
-                        tmp[3] += 1
-                        tmp[4] += 1
-                        column_end = 0
+                        break
+                    ID = []
+                    ID.append(tmp[4])
+                    ID.append(ID[0] + 9)
+                    ID.append(ID[1] + 1)
+                    ID.append(ID[0] + 1)
+                    print(tmp)
+                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                    self.elements.append(e.Element(ID, nod))
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                print(f'koniec kolumny {x2}')
             else:
                 for x1 in range(global_data.N_H):
-                    if column_end < global_data.N_H - 1:
-                        ID = []
-                        ID.append(tmp[4])
-                        ID.append(ID[0] + global_data.N_H)
-                        ID.append(ID[1] + 1)
-                        ID.append(ID[0] + 1)
-                        print(ID)
-                        nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                        self.elements.append(e.Element(ID, nod))
-                        column_end += 1
+                    if x1 == global_data.N_H - 1:
                         tmp[0] += 1
                         tmp[1] += 1
                         tmp[2] += 1
                         tmp[3] += 1
                         tmp[4] += 1
-
-                    else:
-                        tmp[0] += 1
-                        tmp[1] += 1
-                        tmp[2] += 1
-                        tmp[3] += 1
-                        tmp[4] += 1
-                        column_end = 0
-
-            k = k + 1
-
-
+                        break
+                    ID = []
+                    ID.append(tmp[4])
+                    ID.append(ID[0] + global_data.N_H)
+                    ID.append(ID[1] + 1)
+                    ID.append(ID[0] + 1)
+                    print(tmp)
+                    nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+                    self.elements.append(e.Element(ID, nod))
+                    tmp[0] += 1
+                    tmp[1] += 1
+                    tmp[2] += 1
+                    tmp[3] += 1
+                    tmp[4] += 1
+                print(f'koniec kolumny {x2}')
+        for x1 in range(2):
+            ID = []
+            ID.append(tmp[4])
+            ID.append(ID[0] + global_data.N_H)
+            ID.append(ID[1] + 1)
+            ID.append(ID[0] + 1)
+            nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
+            self.elements.append(e.Element(ID, nod))
+            tmp[0] += 1
+            tmp[1] += 1
+            tmp[2] += 1
+            tmp[3] += 1
+            tmp[4] += 1
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
     def calculate_matrix(self):

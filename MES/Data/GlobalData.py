@@ -13,7 +13,6 @@ class GlobalData:
         self.N_B = int(N_B)  # Ilość węzłów na szerokości
         self.npm = int(np)  # Ilość węzłów na mm
         self.nN = int(4 * (self.N_H * 2 * self.npm) + 3 * (2 * self.npm * 3))  # Ilość węzłów w siatce
-        self.nE = int(644)  # Ilość elementów w siatce
         self.Cw = float(specific_heat)  # Ciepło właściwe
         self.k = float(conductivity)  # Przewodność cieplna
         self.ro = float(density)  # Gęstość materiału
