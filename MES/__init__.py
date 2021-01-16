@@ -30,7 +30,7 @@ def made(g):
         else:
             g.calculate_matrix()
         g.matrix_aggregation()
-        d[f'Time {i}'] = [min(temps), max(temps)]
+        d[f'Time {i}'] = temps
         temps = g.solve_ode(temps)
     with open("Temperatures.csv", "w") as outfile:
         writer = csv.writer(outfile)
@@ -38,23 +38,18 @@ def made(g):
         writer.writerows(zip(*d.values()))
 
 
-# def run():
-#     """
-#     Function calls calculate grid and plot printing parallel
-#     """
-#     BaseManager.register('mc', FEM_Grid)
-#     manager = BaseManager()
-#     manager.start()
-#     g = manager.mc(True, 0)
-#     p1 = Process(target=g.plot_grid)
-#     p2 = Process(target=made, args=[g])
-#     p1.start()
-#     p2.start()
-#     p1.join()
-#     p2.join()
-
 def run():
-    g = FEM_Grid(True, 0)
-    g.plot_grid()
-    g.showMeshPlot()
-    made(g)
+    """
+    Function calls calculate grid and plot printing parallel
+    """
+    BaseManager.register('mc', FEM_Grid)
+    manager = BaseManager()
+    manager.start()
+    g = manager.mc(True, 0)
+    p1 = Process(target=g.plot_grid)
+    p2 = Process(target=made, args=[g])
+    p1.start()
+    p2.start()
+    p1.join()
+    p2.join()
+

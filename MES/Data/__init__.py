@@ -19,7 +19,7 @@ except ValueError:
 
 # Ładuje do klasy GlobalData
 global_data = GlobalData(data["initial_temperature"],
-                         data["thermal_paste_initial_temperature"],
+                         data["processor_temperature"],
                          data["simulation_time"],
                          data["simulation_step_time"],
                          data["ambient_temperature"],

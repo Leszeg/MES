@@ -79,7 +79,7 @@ class Element:
             BCH_matrix for element
     """
 
-    def __init__(self, Id: List[int], nodes_c: List[Node]):
+    def __init__(self, Id: List[int], nodes_c: List[Node], is_paste: bool):
         """
         Constructs all the necessary attributes for the Element object
 
@@ -92,7 +92,7 @@ class Element:
             List of node coordinates in element (in set order)
         """
         self.nodes_ID = Id
-
+        self.paste = is_paste
         self.nodes = nodes_c
         self.x = []
         self.y = []
@@ -240,9 +240,14 @@ class Element:
         dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
         dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
 
-        H = [(global_data.k * (np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i] +
-                               np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]))
-             for i in range(global_data.ip)]
+        if self.paste:
+            H = [(global_data.tpk * (np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i] +
+                                     np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]))
+                 for i in range(global_data.ip)]
+        else:
+            H = [(global_data.k * (np.outer(dN_dX[:, i], np.transpose(dN_dX[:, i])) * self.determinant[i] +
+                                   np.outer(dN_dY[:, i], np.transpose(dN_dY[:, i])) * self.determinant[i]))
+                 for i in range(global_data.ip)]
 
         H_almost_end = self.integral(H)
         H_end = 0
@@ -294,9 +299,12 @@ class Element:
         """
 
         N = self._shape_func_value(self.ksi, self.eta, 0)
-
-        C = [(global_data.Cw * global_data.ro * np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i])
-             for i in range(global_data.ip)]
+        if self.paste:
+            C = [(global_data.tpCw * global_data.tpro * np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i])
+                 for i in range(global_data.ip)]
+        else:
+            C = [(global_data.Cw * global_data.ro * np.outer(N[:, i], np.transpose(N[:, i])) * self.determinant[i])
+                 for i in range(global_data.ip)]
 
         C_almost_end = self.integral(C)
         C_end = 0
@@ -341,6 +349,7 @@ class Element:
         k = 0
         L_x = global_data.B / (global_data.N_B - 1)
         L_y = global_data.H / (global_data.N_H - 1)
+
         for i in range(3):
             if self.nodes[i].bc == 1 and self.nodes[i + 1].bc == 1:
                 for j in range(choice2):
@@ -349,8 +358,13 @@ class Element:
 
                     k += 1
                 if i == 0 or i == 2:
-                    BC.append(global_data.alfa * tmp * (L_x / 2))
-                    Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_x / 2))
+                    if i == 0 and self.paste:
+                        # alfa do obliczenia pasty
+                        BC.append(global_data.alfa * tmp * (L_x / 2))
+                        Pl.append(-global_data.alfa * global_data.pt * tmp2 * (L_x / 2))
+                    else:
+                        BC.append(global_data.alfa * tmp * (L_x / 2))
+                        Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_x / 2))
                 else:
                     BC.append(global_data.alfa * tmp * (L_y / 2))
                     Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
@@ -365,8 +379,13 @@ class Element:
                     tmp2 += N[:, k] * self.Ak[j]
                     tmp += np.outer(N[:, k], np.transpose(N[:, k])) * self.Ak[j]
                     k += 1
-                BC.append(global_data.alfa * tmp * (L_y / 2))
-                Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
+                if self.paste:
+                    # alfa do obliczenia pasty
+                    BC.append(global_data.alfa * tmp * (L_y / 2))
+                    Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
+                else:
+                    BC.append(global_data.alfa * tmp * (L_y / 2))
+                    Pl.append(-global_data.alfa * global_data.t0 * tmp2 * (L_y / 2))
                 tmp = 0
                 tmp2 = 0
 

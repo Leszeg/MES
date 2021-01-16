@@ -52,7 +52,8 @@ class FEM_Grid(object):
 
         self.nodes = []
         self.elements = []
-        self.get_temps(is_first, temps)
+        self.temperature_of_nodes = self.temperature_of_nodes = np.full((1, global_data.nN), global_data.it)
+
         k = 0
         choice = True
         # Tworzenie współrzędnych węzłów
@@ -63,36 +64,41 @@ class FEM_Grid(object):
                 for p in range(global_data.npm * 3):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if p == 0:
-                        self.nodes.append(n.Node(i1 * d_x, p * d_y, global_data.tpit, False))
+                        self.temperature_of_nodes[0][k] = 47
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 0))  # 47
                     elif p == 9 - 1:
-                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 1))
                     else:
-                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], False))
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 0))
+                    k += 1
             else:
                 for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if i1 == 0 and j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.tpit, True))
+                        self.temperature_of_nodes[0][k] = 47
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))  # 47
                     elif i1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == global_data.N_B - 1:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.tpit, False))
+                        self.temperature_of_nodes[0][k] = 47
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 0))  # 47
                     elif j1 == global_data.N_H - 1:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == global_data.N_B - 1:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 / 5 == 1 and j1 > 7 or i1 / 17 == 1 and j1 > 7:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 / 12 == 1 and j1 > 7 or i1 / 24 == 1 and j1 > 7:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 / 29 == 1 and j1 > 7 or i1 / 36 == 1 and j1 > 7:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     else:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
-            k += 1
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 0))
+                    k += 1
 
+        self.get_temps(is_first, temps)
         # Tworzenie elementów
         # Pętla for ma dodatek '+ global_data.N_B - 1' ponieważ przy tworzeniu siatki
         # elementy muszą być odpowiednio numerowane i będą dodatkowe 'puste przebiegi'
@@ -132,9 +138,14 @@ class FEM_Grid(object):
                     ID.append(tmp[1])
                     ID.append(tmp[2])
                     ID.append(tmp[3])
-
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                    self.elements.append(e.Element(ID, nod))
+
+                    if x2 == 0:
+                        self.elements.append(e.Element(ID, nod, False))
+                    elif x2 < 3 and x2 != 0:
+                        self.elements.append(e.Element(ID, nod, True))
+                    else:
+                        self.elements.append(e.Element(ID, nod, False))
                     tmp[0] += 1
                     tmp[1] += 1
                     tmp[2] += 1
@@ -155,7 +166,12 @@ class FEM_Grid(object):
                     ID.append(tmp[2])
                     ID.append(tmp[3])
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                    self.elements.append(e.Element(ID, nod))
+                    if x1 == 0:
+                        self.elements.append(e.Element(ID, nod, False))
+                    elif x1 < 3 and x1 != 0:
+                        self.elements.append(e.Element(ID, nod, True))
+                    else:
+                        self.elements.append(e.Element(ID, nod, False))
                     tmp[0] += 1
                     tmp[1] += 1
                     tmp[2] += 1
@@ -170,12 +186,20 @@ class FEM_Grid(object):
             self.elements[j].boundary_condition()
 
     def solve_ode(self, temps):
+
         Hz = self.H_global + (self.C_global / global_data.sst)
         x = -np.dot(self.C_global / global_data.sst, temps.T).T
         Pz = -(self.P_global + x)
         x = solve(Hz, Pz.T).T
+        for i in range(global_data.nN):
+            if temps[i] == 47:
+                x[i] = 47
         self.get_temps(False, x)
         return x
+
+    def delta_tau(self):
+        asr = global_data.k / global_data.ro * global_data.Cw
+        dt = (global_data.B / (global_data.N_B - 1)) ** 2 / (0.5 * asr)
 
     def plot_grid(self):
         """
@@ -338,7 +362,6 @@ class FEM_Grid(object):
 
     def get_temps(self, is_first, temps):
         if is_first:
-            self.temperature_of_nodes = np.full((1, global_data.nN), global_data.it)
             return self.temperature_of_nodes
         else:
             self.temperature_of_nodes = temps

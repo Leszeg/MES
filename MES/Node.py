@@ -15,7 +15,7 @@ class Node:
         Flag needed to check if there is a boundary condition
     """
 
-    def __init__(self, X: float, Y: float, T0: float, BC: bool):
+    def __init__(self, X: float, Y: float, T0: float, BC: int):
         """
         Constructs all the necessary attributes for the Node object
 

@@ -1,12 +1,12 @@
 class GlobalData:
 
-    def __init__(self, initial_temperature, thermal_paste_initial_temperature, simulation_time, simulation_step_time,
+    def __init__(self, initial_temperature, processor_temperature, simulation_time, simulation_step_time,
                  ambient_temperature, alfa, H, B, N_H,
                  N_B, specific_heat, thermal_paste_specific_heat, conductivity,
                  thermal_paste_conductivity, density, thermal_paste_density,
                  integration_points, np):
         self.it = float(initial_temperature)  # Temperatura początkowa
-        self.tpit = float(thermal_paste_initial_temperature)  # Temperatura początkowa
+        self.pt = float(processor_temperature)  # Temperatura początkowa
         self.st = float(simulation_time)  # Czas symulacji
         self.sst = float(simulation_step_time)  # Czas kroku symulacji
         self.t0 = float(ambient_temperature)  # Temperatura otoczenia
