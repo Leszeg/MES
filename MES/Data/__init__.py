@@ -19,6 +19,7 @@ except ValueError:
 
 # Ładuje do klasy GlobalData
 global_data = GlobalData(data["initial_temperature"],
+                         data["thermal_paste_initial_temperature"],
                          data["simulation_time"],
                          data["simulation_step_time"],
                          data["ambient_temperature"],
@@ -28,8 +29,11 @@ global_data = GlobalData(data["initial_temperature"],
                          data["N_H"],
                          data["N_B"],
                          data["specific_heat"],
+                         data["thermal_paste_specific_heat"],
                          data["conductivity"],
+                         data["thermal_paste_conductivity"],
                          data["density"],
+                         data["thermal_paste_density"],
                          data["integration_points"],
                          data["number_of_nodes_per_mm"])
 

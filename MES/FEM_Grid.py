@@ -61,10 +61,9 @@ class FEM_Grid(object):
                 choice = not choice
             if not choice:
                 for p in range(global_data.npm * 3):
-                    pass
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if p == 0:
-                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, global_data.tpit, False))
                     elif p == 9 - 1:
                         self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], True))
                     else:
@@ -72,10 +71,14 @@ class FEM_Grid(object):
             else:
                 for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
-                    if i1 == 0:
+                    if i1 == 0 and j1 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.tpit, True))
+                    elif i1 == 0:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     elif j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, global_data.tpit, False))
                     elif j1 == global_data.N_H - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     elif i1 == global_data.N_B - 1:
@@ -96,25 +99,40 @@ class FEM_Grid(object):
         # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         choice = True
-        for x2 in range(global_data.N_B + 2):
-            if x2 / 5 == 1 and x2 != 1 or x2 / 12 == 1 or x2 / 17 == 1 or x2 / 24 == 1 or x2 / 29 == 1 or x2 / 36 == 1:
+        k = 0
+        for x2 in range(global_data.N_B - 1):
+            if x2 / 5 == 1 or x2 / 12 == 1 or x2 / 17 == 1 or x2 / 24 == 1 or x2 / 29 == 1 or x2 / 36 == 1:
                 choice = not choice
             if not choice:
-                for x in range(7):
-                    if x == 7 - 1:
-                        tmp[0] += 1
-                        tmp[1] += 1
-                        tmp[2] += 1
-                        tmp[3] += 1
-                        tmp[4] += 1
+                for o in range(9):
+                    if o == 8:
+                        if k == 0 or k == 7 or k == 14:
+                            tmp[0] += 13
+                            tmp[1] += 1
+                            tmp[2] += 1
+                            tmp[3] += 13
+                            tmp[4] += 1
+                        elif k == 6 or k == 13 or k == 20:
+                            tmp[0] += 1
+                            tmp[1] += 13
+                            tmp[2] += 13
+                            tmp[3] += 1
+                            tmp[4] += 1
+
+                        else:
+                            tmp[0] += 1
+                            tmp[1] += 1
+                            tmp[2] += 1
+                            tmp[3] += 1
+                            tmp[4] += 1
+                        k = k + 1
                         break
                     ID = []
-                    ID.append(tmp[4])
-                    ID.append(ID[0] + global_data.N_H)
-                    ID.append(ID[1] + 1)
-                    ID.append(ID[0] + 1)
-                    print(tmp)
-                    print(ID)
+                    ID.append(tmp[0])
+                    ID.append(tmp[1])
+                    ID.append(tmp[2])
+                    ID.append(tmp[3])
+
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
                     self.elements.append(e.Element(ID, nod))
                     tmp[0] += 1
@@ -122,7 +140,6 @@ class FEM_Grid(object):
                     tmp[2] += 1
                     tmp[3] += 1
                     tmp[4] += 1
-                print(f'koniec kolumny {x2}')
             else:
                 for x1 in range(global_data.N_H):
                     if x1 == global_data.N_H - 1:
@@ -133,12 +150,10 @@ class FEM_Grid(object):
                         tmp[4] += 1
                         break
                     ID = []
-                    ID.append(tmp[4])
-                    ID.append(ID[0] + global_data.N_H)
-                    ID.append(ID[1] + 1)
-                    ID.append(ID[0] + 1)
-                    print(tmp)
-                    print(ID)
+                    ID.append(tmp[0])
+                    ID.append(tmp[1])
+                    ID.append(tmp[2])
+                    ID.append(tmp[3])
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
                     self.elements.append(e.Element(ID, nod))
                     tmp[0] += 1
@@ -146,7 +161,6 @@ class FEM_Grid(object):
                     tmp[2] += 1
                     tmp[3] += 1
                     tmp[4] += 1
-                print(f'koniec kolumny {x2}')
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
     def calculate_matrix(self):
@@ -209,7 +223,7 @@ class FEM_Grid(object):
         tuple
             Returns global matrices
         """
-        r = global_data.N_B * global_data.N_H
+        r = global_data.nN
         Pg = zeros(r, float)
         Hg = zeros((r, r), float)
         Cg = zeros((r, r), float)
@@ -324,7 +338,7 @@ class FEM_Grid(object):
 
     def get_temps(self, is_first, temps):
         if is_first:
-            self.temperature_of_nodes = np.full((1, global_data.N_B * global_data.N_H), global_data.it)
+            self.temperature_of_nodes = np.full((1, global_data.nN), global_data.it)
             return self.temperature_of_nodes
         else:
             self.temperature_of_nodes = temps
