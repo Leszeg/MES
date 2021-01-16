@@ -80,7 +80,11 @@ class FEM_Grid(object):
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
-                    elif i1 % 5 == 0 and j1 > 7:
+                    elif i1 / 5 == 1 and j1 > 7 or i1 / 17 == 1 and j1 > 7:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif i1 / 12 == 1 and j1 > 7 or i1 / 24 == 1 and j1 > 7:
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
+                    elif i1 / 29 == 1 and j1 > 7 or i1 / 36 == 1 and j1 > 7:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], True))
                     else:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], False))
@@ -92,12 +96,12 @@ class FEM_Grid(object):
         # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         choice = True
-        for x2 in range(global_data.N_B):
-            if x2 % 5 == 0 and x2 != 0:
+        for x2 in range(global_data.N_B + 2):
+            if x2 / 5 == 1 and x2 != 1 or x2 / 12 == 1 or x2 / 17 == 1 or x2 / 24 == 1 or x2 / 29 == 1 or x2 / 36 == 1:
                 choice = not choice
             if not choice:
-                for x in range(global_data.npm * 3):
-                    if x == global_data.npm * 3 - 1:
+                for x in range(7):
+                    if x == 7 - 1:
                         tmp[0] += 1
                         tmp[1] += 1
                         tmp[2] += 1
@@ -106,10 +110,11 @@ class FEM_Grid(object):
                         break
                     ID = []
                     ID.append(tmp[4])
-                    ID.append(ID[0] + 9)
+                    ID.append(ID[0] + global_data.N_H)
                     ID.append(ID[1] + 1)
                     ID.append(ID[0] + 1)
                     print(tmp)
+                    print(ID)
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
                     self.elements.append(e.Element(ID, nod))
                     tmp[0] += 1
@@ -133,6 +138,7 @@ class FEM_Grid(object):
                     ID.append(ID[1] + 1)
                     ID.append(ID[0] + 1)
                     print(tmp)
+                    print(ID)
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
                     self.elements.append(e.Element(ID, nod))
                     tmp[0] += 1
@@ -141,19 +147,6 @@ class FEM_Grid(object):
                     tmp[3] += 1
                     tmp[4] += 1
                 print(f'koniec kolumny {x2}')
-        for x1 in range(2):
-            ID = []
-            ID.append(tmp[4])
-            ID.append(ID[0] + global_data.N_H)
-            ID.append(ID[1] + 1)
-            ID.append(ID[0] + 1)
-            nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-            self.elements.append(e.Element(ID, nod))
-            tmp[0] += 1
-            tmp[1] += 1
-            tmp[2] += 1
-            tmp[3] += 1
-            tmp[4] += 1
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
     def calculate_matrix(self):
