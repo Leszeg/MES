@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.collections
 import numpy as np
 import xlwt
 from numpy import zeros
@@ -187,8 +188,8 @@ class FEM_Grid(object):
 
     def solve_ode(self, temps):
 
-        Hz = self.H_global + (self.C_global / global_data.sst)
-        x = -np.dot(self.C_global / global_data.sst, temps.T).T
+        Hz = self.H_global + (self.C_global / 0.002)
+        x = -np.dot(self.C_global / 0.002, temps.T).T
         Pz = -(self.P_global + x)
         x = solve(Hz, Pz.T).T
         for i in range(global_data.nN):
@@ -196,10 +197,6 @@ class FEM_Grid(object):
                 x[i] = 47
         self.get_temps(False, x)
         return x
-
-    def delta_tau(self):
-        asr = global_data.k / global_data.ro * global_data.Cw
-        dt = (global_data.B / (global_data.N_B - 1)) ** 2 / (0.5 * asr)
 
     def plot_grid(self):
         """
@@ -227,10 +224,41 @@ class FEM_Grid(object):
     def showMeshPlot(self):
         x = []
         y = []
+        li = []
+        li2 = []
         for node in self.nodes:
             x.append(node.x)
             y.append(node.y)
-        plt.plot(x, y, ".k")
+        for i in range(global_data.nE):
+            li.append(self.elements[i].nodes_ID)
+            sr = self.temperature_of_nodes[li[i][0]] + self.temperature_of_nodes[li[i][1]] + self.temperature_of_nodes[
+                li[i][2]] + \
+                 self.temperature_of_nodes[li[i][3]]
+            sr = sr / 4
+            li2.append(sr)
+        values = np.array(li2)
+        elem = np.array(li)
+
+        def quatplot(x, y, quatrangles, values, ax=None, **kwargs):
+            if not ax: ax = plt.gca()
+            xy = np.c_[x, y]
+            verts = xy[quatrangles]
+            pc = matplotlib.collections.PolyCollection(verts, **kwargs)
+            pc.set_array(values)
+            ax.add_collection(pc)
+            ax.autoscale()
+            return pc
+
+        fig, ax = plt.subplots()
+        ax.set_aspect('equal')
+
+        self.w = quatplot(x, y, np.asarray(elem), values, ax=ax,
+                          edgecolor="crimson", cmap="rainbow")
+        fig.colorbar(w, ax=ax)
+        ax.plot(x, y, marker=",", ls="", color="crimson")
+
+        ax.set(title='This is the plot for: quad', xlabel='X Axis', ylabel='Y Axis')
+
         plt.show()
 
     def matrix_aggregation(self):
