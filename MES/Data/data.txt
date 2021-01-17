@@ -1,7 +1,6 @@
 50      initial_temperature
-47      processor_temperature
 30000     simulation_time
-1       simulation_step_time
+0.002       simulation_step_time
 22      ambient_temperature
 80     alfa
 0.007   H

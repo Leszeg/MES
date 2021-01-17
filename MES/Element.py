@@ -90,6 +90,10 @@ class Element:
 
         nodes_c : list of Node
             List of node coordinates in element (in set order)
+
+        is_paste : bool
+            The variable determines the material of the element
+
         """
         self.nodes_ID = Id
         self.paste = is_paste
@@ -163,7 +167,7 @@ class Element:
 
     def jacobian(self):
         """
-        Function calculate jacobian and required parameters
+        Function calculate jacobian and required parameters for future calculations
 
         Returns
         -------
@@ -236,7 +240,6 @@ class Element:
         tuple
             Return tuple of H_matrix for each integration point and H_matrix for element
         """
-
         dN_dX = (self.dN_dKsi * self.inv_jac[0][0] + self.dN_dEta * (self.inv_jac[0][1]))
         dN_dY = (self.dN_dKsi * self.inv_jac[0][2] + self.dN_dEta * (self.inv_jac[0][3]))
 

@@ -1,5 +1,7 @@
+"""
+The file initializes global data
+"""
 from pathlib import Path
-
 from MES.Data.GlobalData import GlobalData
 
 # Czytam dane potrzebne do wygenerowania siatki z pliku
@@ -19,7 +21,6 @@ except ValueError:
 
 # Ładuje do klasy GlobalData
 global_data = GlobalData(data["initial_temperature"],
-                         data["processor_temperature"],
                          data["simulation_time"],
                          data["simulation_step_time"],
                          data["ambient_temperature"],
@@ -36,10 +37,3 @@ global_data = GlobalData(data["initial_temperature"],
                          data["thermal_paste_density"],
                          data["integration_points"],
                          data["number_of_nodes_per_mm"])
-
-
-def print_grid_data():
-    print("GLOBAL DATA")
-    attr = vars(global_data)
-    for keys, values in attr.items():
-        print(f"{keys}" + "     " + f"{values}")

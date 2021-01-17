@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt
 import matplotlib.collections
+import matplotlib.pyplot as plt
 import numpy as np
 import xlwt
 from numpy import zeros
@@ -9,10 +9,9 @@ from MES import Node as n, Element as e
 from MES.Data import global_data
 
 
-# Przechowuje listę elementów i listę węzłów potrzebne do stworzenia siatki
 class FEM_Grid(object):
     """
-    Class represents FEM grid
+    Class represents FEM grid. Stores the list of elements and the list of nodes needed to create the mesh
 
     Attributes
     ----------
@@ -65,7 +64,7 @@ class FEM_Grid(object):
                 for p in range(global_data.npm * 3):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if p == 0:
-                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 0))  # 47
+                        self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 0))
                     elif p == 9 - 1:
                         self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 1))
                     else:
@@ -75,13 +74,13 @@ class FEM_Grid(object):
                 for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if i1 == 0 and j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))  # 47
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == 0:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif j1 == 0:
-                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 0))  # 47
+                        self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 0))
                     elif j1 == global_data.N_H - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == global_data.N_B - 1:
@@ -98,9 +97,6 @@ class FEM_Grid(object):
 
         self.get_temps(is_first, temps)
         # Tworzenie elementów
-        # Pętla for ma dodatek '+ global_data.N_B - 1' ponieważ przy tworzeniu siatki
-        # elementy muszą być odpowiednio numerowane i będą dodatkowe 'puste przebiegi'
-        # aby zachować odpowiednią numeracja przy końcach i początkach kolumn siatki
         tmp = [0, global_data.N_H, global_data.N_H + 1, 1, 0]
         choice = True
         k = 0
@@ -174,44 +170,37 @@ class FEM_Grid(object):
         self.H_global, self.C_global, self.P_global = self.matrix_aggregation()
 
     def calculate_matrix(self):
+        """
+        Computes the current local matrix for each element
+        """
         for j in range(len(self.elements)):
             self.elements[j].H_matrix()
             self.elements[j].C_matrix()
             self.elements[j].boundary_condition()
 
     def solve_ode(self, temps):
+        """
+        Parameters
+        ----------
+        temps : List
+            List of temperatures in nodes
 
-        Hz = self.H_global + (self.C_global / 0.002)
-        x = -np.dot(self.C_global / 0.002, temps.T).T
+        Returns
+        -------
+            List of temperatures in nodes after interpolation
+
+        """
+        Hz = self.H_global + (self.C_global / global_data.sst)
+        x = -np.dot(self.C_global / global_data.sst, temps.T).T
         Pz = -(self.P_global + x)
         x = solve(Hz, Pz.T).T
         self.get_temps(False, x)
         return x
 
-    def plot_grid(self):
-        """
-        Function plot grid elements and nodes.
-        Blue - simple node
-        Red - boundary condition
-        """
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        for element in self.elements:
-            for i in range(4):
-                if element.nodes[i].bc == 0:
-                    plt.scatter(element.x[i], element.y[i], color='blue')
-                    if len(self.elements) < 10:
-                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
-                if element.nodes[i].bc == 1:
-                    plt.scatter(element.x[i], element.y[i], color='red')
-                    if len(self.elements) < 10:
-                        plt.annotate(element.nodes_ID[i], (element.x[i], element.y[i]))
-
-        ax.grid(which='both')
-        plt.show()
-        # plt.savefig("plot.png")
-
     def showMeshPlot(self):
+        """
+        Draws a grid graph with the temperature distribution
+        """
         x = []
         y = []
         li = []
@@ -254,11 +243,6 @@ class FEM_Grid(object):
     def matrix_aggregation(self):
         """
         Function aggregate local matrices to global
-        Parameters
-        ----------
-        H_locals : ndarray
-        C_locals : ndarray
-        P_locals : ndarray
 
         Returns
         -------
@@ -281,6 +265,9 @@ class FEM_Grid(object):
         return Hg, Cg, Pg
 
     def to_file(self):
+        """
+        Save elements data to file
+        """
         book = xlwt.Workbook(encoding="utf-8")
         sheet = []
         counter = 0
@@ -379,6 +366,19 @@ class FEM_Grid(object):
         book.save("MES.xls")
 
     def get_temps(self, is_first, temps):
+        """
+
+        Parameters
+        ----------
+        is_first : bool
+            The variable verifies whether it is called for the first time
+        temps :
+            List of new nodes temperatures
+
+        Returns
+        -------
+            List of new nodes temperatures
+        """
         if is_first:
             return self.temperature_of_nodes
         else:
