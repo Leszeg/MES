@@ -1,6 +1,6 @@
-22      initial_temperature
+50      initial_temperature
 47      processor_temperature
-1000     simulation_time
+30000     simulation_time
 1       simulation_step_time
 22      ambient_temperature
 80     alfa
@@ -14,5 +14,5 @@
 12.5     thermal_paste_conductivity
 8900    density
 3700    thermal_paste_density
-16       integration_points
+4       integration_points
 3       number_of_nodes_per_mm

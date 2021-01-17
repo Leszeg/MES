@@ -65,7 +65,6 @@ class FEM_Grid(object):
                 for p in range(global_data.npm * 3):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if p == 0:
-                        self.temperature_of_nodes[0][k] = 47
                         self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 0))  # 47
                     elif p == 9 - 1:
                         self.nodes.append(n.Node(i1 * d_x, p * d_y, self.temperature_of_nodes[0][k], 1))
@@ -76,14 +75,12 @@ class FEM_Grid(object):
                 for j1 in range(global_data.N_H):
                     # Warunki odpowiadają za właściwe ustawienie warunku brzegowego(flaga BC) na krawędziach siatki
                     if i1 == 0 and j1 == 0:
-                        self.temperature_of_nodes[0][k] = 47
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))  # 47
                     elif i1 == 0:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif i1 == global_data.N_B - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
                     elif j1 == 0:
-                        self.temperature_of_nodes[0][k] = 47
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 0))  # 47
                     elif j1 == global_data.N_H - 1:
                         self.nodes.append(n.Node(i1 * d_x, j1 * d_y, self.temperature_of_nodes[0][k], 1))
@@ -141,9 +138,7 @@ class FEM_Grid(object):
                     ID.append(tmp[3])
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
 
-                    if x2 == 0:
-                        self.elements.append(e.Element(ID, nod, False))
-                    elif x2 < 3 and x2 != 0:
+                    if x2 < 3:
                         self.elements.append(e.Element(ID, nod, True))
                     else:
                         self.elements.append(e.Element(ID, nod, False))
@@ -167,9 +162,7 @@ class FEM_Grid(object):
                     ID.append(tmp[2])
                     ID.append(tmp[3])
                     nod = [self.nodes[tmp[0]], self.nodes[tmp[1]], self.nodes[tmp[2]], self.nodes[tmp[3]]]
-                    if x1 == 0:
-                        self.elements.append(e.Element(ID, nod, False))
-                    elif x1 < 3 and x1 != 0:
+                    if x1 < 3:
                         self.elements.append(e.Element(ID, nod, True))
                     else:
                         self.elements.append(e.Element(ID, nod, False))
@@ -192,9 +185,6 @@ class FEM_Grid(object):
         x = -np.dot(self.C_global / 0.002, temps.T).T
         Pz = -(self.P_global + x)
         x = solve(Hz, Pz.T).T
-        for i in range(global_data.nN):
-            if temps[i] == 47:
-                x[i] = 47
         self.get_temps(False, x)
         return x
 
@@ -252,12 +242,12 @@ class FEM_Grid(object):
         fig, ax = plt.subplots()
         ax.set_aspect('equal')
 
-        self.w = quatplot(x, y, np.asarray(elem), values, ax=ax,
-                          edgecolor="crimson", cmap="rainbow")
+        w = quatplot(x, y, np.asarray(elem), values, ax=ax,
+                     edgecolor="crimson", cmap="rainbow")
         fig.colorbar(w, ax=ax)
         ax.plot(x, y, marker=",", ls="", color="crimson")
 
-        ax.set(title='This is the plot for: quad', xlabel='X Axis', ylabel='Y Axis')
+        ax.set(title='Wykres rozchodzenia ciepła w radiatorze', xlabel='X Axis', ylabel='Y Axis')
 
         plt.show()
 
